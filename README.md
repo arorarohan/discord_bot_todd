@@ -10,3 +10,8 @@ making a discord bot for some reason
   - mostenire: regurgitates a list of mostenire derivatives
   - add-mostenire: allows the user to add mostenire derivatives to the list
 - we can come up with more nonsense features as we go
+
+## learnings
+- discord API
+- decorators
+- async programming
