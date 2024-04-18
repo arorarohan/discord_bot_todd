@@ -1,14 +1,13 @@
 import discord
 from discord.ext import commands
 from discord import FFmpegPCMAudio
-from private_config import *
+import private_config
 import csv
 
 #define some constants
 MOSTENIRE_PATH = 'lists/mostenire_list.csv'
 SHAME_PATH = 'lists/file_of_shame.txt'
 AUDIO_DIRECTORY = {'whisper':'audio/todd_whispers.mp3'}
-TARGETED_USER = ''
 
 #set our intents
 intents = discord.Intents.all()
@@ -36,7 +35,7 @@ async def on_ready():
 async def on_member_join(member):
     
     #get the channel that we want to send our welcome message in
-    channel = client.get_channel(WELCOME_CHANNEL)
+    channel = client.get_channel(private_config.WELCOME_CHANNEL)
 
     #then send our message in that channel, and print that we have done so to the terminal.
     await channel.send("Yo dog, nice to meet you dog. I'm Todd. the dog. woof bark woof.")
@@ -47,7 +46,7 @@ async def on_member_join(member):
 @client.event
 async def on_message(message):
     #check if the message was sent by our targeted user
-    if message.author.name == TARGETED_USER:
+    if message.author.name == private_config.TARGETED_USER:
         
         #save the contents in our file
         with open(SHAME_PATH,'a') as file:
@@ -66,7 +65,7 @@ async def on_message(message):
 async def on_member_remove(member):
 
     #once again, first get the channel, then send our message there and tell the host it's been done.
-    channel = client.get_channel(WELCOME_CHANNEL)
+    channel = client.get_channel(private_config.WELCOME_CHANNEL)
     await channel.send("Goobye. Guess you weren't a real dog. I shouldn't have called you dog. Sincerely, todd the dog (a real dog)")
     print("Said goobye to a member!")
 
@@ -130,17 +129,22 @@ async def mostenire_add(ctx,arg=''):
 #command to view the file of shame
 @client.command()
 async def file_of_shame(ctx):
-    #get the contents of the file
-    with open(SHAME_PATH,'r') as file:
-        contents = file.read()
-    
-    #chuck them out if there's anything to chuck.
-    if not contents == '':
-        await ctx.send(f"contents of the file of shame (assigned to user {TARGETED_USER}): \n" + contents)
-        print("printed the file of shame")
+    #don't run if there isn't an assigned user
+    if private_config.TARGETED_USER == '':
+        await ctx.send("no user assigned to the file of shame!")
+        print("file of shame asked for, but no user assigned!")
     else:
-        await ctx.send(f"the file of shame is assigned to {TARGETED_USER}, but is empty. todd")
-        print("called an empty file of shame!")
+        #get the contents of the file
+        with open(SHAME_PATH,'r') as file:
+            contents = file.read()
+        
+        #chuck them out if there's anything to chuck.
+        if not contents == '':
+            await ctx.send(f"contents of the file of shame (assigned to user {private_config.TARGETED_USER}): \n" + contents)
+            print("printed the file of shame")
+        else:
+            await ctx.send(f"the file of shame is assigned to {private_config.TARGETED_USER}, but is empty. todd")
+            print("called an empty file of shame!")
 
 
 #command to embed a link to the github repo for this file. shamefully hardcoded, i could bother to scrape the repo for items to populate this embed but i am not bothered.
@@ -293,4 +297,4 @@ async def playlist(ctx):
 
 
 #run the bot, linking it to our token. replace this with a string containing your own token.
-client.run(DISCORD_TOKEN)
+client.run(private_config.DISCORD_TOKEN)

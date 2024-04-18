@@ -5,7 +5,7 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 - python3
 - discord.py library
 - ffmpeg installed and added to PATH
-- a private_config.py file with a discord API key (DISCORD_TOKEN, str) and welcome channel ID (str)
+- a private_config.py file set up. you can view private_config_example.py and follow the instructions, then change the name to private_config.py
 
 
 ## usage - commands (keyword is 'todd' followed by a space)
