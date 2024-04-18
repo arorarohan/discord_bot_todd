@@ -14,6 +14,7 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 - mostenire_list - gives a list of words from mostenire_list.csv
 - mostenire_add - adds mostenires to the list.
 - file_of_shame - prints the file of shame, a list of messages sent by TARGETED_USER
+- github - embeds the github repo for todd!
 
 ### audio commands
 - join - joins the voice channel of the user who sent the message

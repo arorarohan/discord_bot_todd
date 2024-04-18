@@ -8,7 +8,7 @@ import csv
 MOSTENIRE_PATH = 'lists/mostenire_list.csv'
 SHAME_PATH = 'lists/file_of_shame.txt'
 AUDIO_DIRECTORY = {'whisper':'audio/todd_whispers.mp3'}
-TARGETED_USER = 'dobesquiddy'
+TARGETED_USER = ''
 
 #set our intents
 intents = discord.Intents.all()
@@ -143,16 +143,30 @@ async def file_of_shame(ctx):
         print("called an empty file of shame!")
 
 
-#command to embed a link to the github repo for this file
+#command to embed a link to the github repo for this file. shamefully hardcoded, i could bother to scrape the repo for items to populate this embed but i am not bothered.
 @client.command()
 async def github(ctx):
+    
+    #define the embed
     embed = discord.Embed(
         title='todd github repo', 
         url='https://github.com/arorarohan/discord_bot_todd', 
         description='Welcome to my GitHub repo for this project! You can find the source code and usage documentation here.',
         color=0x2dba4e
         )
+    #include the banner as our awesome thumbnail
+    embed.set_image(url='https://github.com/arorarohan/discord_bot_todd/blob/main/assets/banner.png?raw=true')
+    #embed.set_image(url='/assets/banner.png')
+    #include the author (me)
+    embed.set_author(
+        name='Rohan A',
+        url='https://github.com/arorarohan/',
+        icon_url='https://avatars.githubusercontent.com/u/11210289?v=4'
+    )
+    
+    #send the embed
     await ctx.send(embed=embed)
+    print("embedded our github repo!")
 
 
 
