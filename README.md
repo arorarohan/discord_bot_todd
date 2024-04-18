@@ -3,7 +3,7 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 
 ## requirements
 - python3
-- discord.py library
+- discord.py library including discord.py[voice] module
 - ffmpeg installed and added to PATH
 - a private_config.py file set up. you can view private_config_example.py and follow the instructions, then change the name to private_config.py
 
