@@ -8,7 +8,11 @@ import random
 #define some constants
 MOSTENIRE_PATH = 'lists/mostenire_list.csv'
 SHAME_PATH = 'lists/file_of_shame.txt'
-AUDIO_DIRECTORY = {'whisper':'audio/todd_whispers.mp3'}
+
+AUDIO_DIRECTORY = {
+    'whisper':'audio/todd_whispers.mp3',
+
+    }
 
 #set our intents
 intents = discord.Intents.all()
