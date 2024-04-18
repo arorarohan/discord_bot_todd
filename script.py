@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord import FFmpegPCMAudio
 import private_config
 import csv
+import random
 
 #define some constants
 MOSTENIRE_PATH = 'lists/mostenire_list.csv'
@@ -160,7 +161,7 @@ async def github(ctx):
         )
     #include the banner as our awesome thumbnail
     embed.set_image(url='https://github.com/arorarohan/discord_bot_todd/blob/main/assets/banner.png?raw=true')
-    #embed.set_image(url='/assets/banner.png')
+    #embed.set_image(url='/assets/banner.png') is what i wanted to do but it didn't work
     #include the author (me)
     embed.set_author(
         name='Rohan A',
@@ -172,6 +173,42 @@ async def github(ctx):
     await ctx.send(embed=embed)
     print("embedded our github repo!")
 
+
+#command for farting and pooping.
+#first we need our variable outside of the function.
+farts = 0
+
+@client.command()
+async def fart(ctx):
+    #use global farts
+    global farts
+    #if farts < 3 we want to just fart without a chance of pooping.
+    if farts < 3:
+        farts += 1
+        await ctx.send(f"farted! I have farted {farts} times so far. I had 0 chance of pooping just now. woof.")
+        print(f"farted. farts = {farts}. Poop chance = 0")
+    
+    #if farts >= 3 we want to have a chance of pooping.
+    else:
+        #increase poop chance by 10% for each fart over 3.
+        poop_chance = 0.2 + 0.1 * (farts - 3)
+        
+        #decide whether to poop
+        possibilities = [True, False]
+        weights = [poop_chance, 1-poop_chance]
+        will_poop = random.choices(possibilities,weights)[0]
+
+        #act accordingly
+        if will_poop:
+            await ctx.send(f"I just pooped (had a {poop_chance} chance of doing so). todd say oops.")
+            print(f"pooped at {poop_chance}")
+            farts = 0
+        else:
+            farts += 1
+            await ctx.send(f"farted! I have farted {farts} times so far. I had a {poop_chance} chance of pooping just now, but i didn't. todd sighs in relief.")
+            print(f"farted {farts} times at {poop_chance}")
+
+        
 
 
 ##################################################################################################################################
