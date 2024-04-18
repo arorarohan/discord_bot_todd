@@ -27,9 +27,13 @@ client = commands.Bot(command_prefix='todd ', intents=intents)
 #########################################EVENTS######################################################
 ######################################################################################################
 
-#define what the bot does when it starts up, for now just show that it has started via the terminal
+#define what the bot does when it starts up
 @client.event
 async def on_ready():
+
+    #set todd's status
+    await client.change_presence(activity=discord.CustomActivity('sniffing around, being todd.'))
+
     #this is printed to the terminal for the host, not visible to the user
     print("The bot is now ready for use!")
     print("------------------------------------")
