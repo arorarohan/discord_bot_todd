@@ -11,7 +11,7 @@ SHAME_PATH = 'lists/file_of_shame.txt'
 
 AUDIO_DIRECTORY = {
     'whisper':'audio/todd_whispers.mp3',
-
+    'chandelier':'audio/todd_sings_chandelier.mp3',
     }
 
 #set our intents
