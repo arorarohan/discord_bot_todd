@@ -5,8 +5,8 @@ from private_config import *
 import csv
 
 #define some constants
-MOSTENIRE_PATH = 'mostenire_list.csv'
-SHAME_PATH = 'file_of_shame.txt'
+MOSTENIRE_PATH = 'lists/mostenire_list.csv'
+SHAME_PATH = 'lists/file_of_shame.txt'
 AUDIO_DIRECTORY = {'whisper':'audio/todd_whispers.mp3'}
 TARGETED_USER = 'dobesquiddy'
 
@@ -143,6 +143,19 @@ async def file_of_shame(ctx):
         print("called an empty file of shame!")
 
 
+#command to embed a link to the github repo for this file
+@client.command()
+async def github(ctx):
+    embed = discord.Embed(
+        title='todd github repo', 
+        url='https://github.com/arorarohan/discord_bot_todd', 
+        description='Welcome to my GitHub repo for this project! You can find the source code and usage documentation here.',
+        color=0x2dba4e
+        )
+    await ctx.send(embed=embed)
+
+
+
 ##################################################################################################################################
 #######################################################AUDIO COMMANDS#############################################################
 ##################################################################################################################################
@@ -240,6 +253,29 @@ async def leave(ctx):
     else:
         await ctx.send("i am todd. I am not in a voice channel. There isn't anything to leave. I'm not very smart but I know this. todd")
         print("explained why we couldn't leave a voice channel!")
+
+
+#we need a playlist to show the user what files we have and how to call them
+@client.command()
+async def playlist(ctx):
+    #if we don't have anything in the playlist, say so!
+    if AUDIO_DIRECTORY == {}:
+        await ctx.send("todd think the playlist is empty! Add files to the /audio folder and the audio directory to make them playable woof bark.")
+        print("called an empty audio directory!")
+    
+    #if there are things in the directory, store them in a list of displayable rows
+    else:
+        message_list = []
+        for key, value in AUDIO_DIRECTORY.items():
+            message_list.append(f"{key} - {value}")
+        
+        #make a string to display
+        message = "the following items are available to play: use <todd play [keyword on the left] to play the file on the right. \n"
+        message = message + "\n".join(message_list)
+
+        #display the message
+        await ctx.send(message)
+        print("delivered the playlist for users!")
 
 
 #run the bot, linking it to our token. replace this with a string containing your own token.
