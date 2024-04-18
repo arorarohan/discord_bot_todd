@@ -200,6 +200,9 @@ async def fart(ctx):
 
         #act accordingly
         if will_poop:
+            with open('assets/poop.png','rb') as image:
+                to_send = discord.File(image)
+                await ctx.send(file=to_send)
             await ctx.send(f"I just pooped (had a {poop_chance} chance of doing so). todd say oops.")
             print(f"pooped at {poop_chance}")
             farts = 0
