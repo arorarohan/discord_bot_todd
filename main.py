@@ -32,6 +32,7 @@ def run():
         await client.load_extension('cogs.error_handling')
         await client.load_extension('cogs.text_commands')
         await client.load_extension('cogs.audio_commands')
+        await client.load_extension('cogs.games')
 
         #set todd's status
         await client.change_presence(activity=discord.CustomActivity('sniffing around, being todd.'))
