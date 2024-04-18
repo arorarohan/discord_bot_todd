@@ -79,6 +79,31 @@ async def on_member_remove(member):
     print("Said goobye to a member!")
 
 
+#error handling messages, catch-all non-specific errors so that in the worst case that our error has not been handled by the specific function, we at least can give some generic feedback.
+@client.event
+async def on_command_error(ctx, error):
+    
+    #missing perms
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("You don't have permission to run this command!")
+        print("ERROR: user didn't have the perms")
+    #can't read the channel
+    if isinstance(error, commands.ChannelNotReadable):
+        await ctx.send("I can't read this channel, fix my perms!")
+        print("ERROR: couldn't read the channel")
+    #unkown command
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send("todd doesn't know that command yet!! use <todd help> for a list of commands")
+        print("ERROR: received an unknown command")
+    #member not found
+    if isinstance(error, commands.MemberNotFound):
+        await ctx.send("todd sniffed through the entire server and couldn't find that member!")
+        print("ERROR: member not found")
+    #missing argument
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("you were supposed to give todd an argument, but you didn't , oh no, todd whimpers")
+        print("ERROR: missing required argument")
+
 #############################################################################################################
 ################################################TEXT COMMANDS################################################
 #############################################################################################################
