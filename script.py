@@ -284,7 +284,7 @@ async def playlist(ctx):
             message_list.append(f"{key} - {value}")
         
         #make a string to display
-        message = "the following items are available to play: use <todd play [keyword on the left] to play the file on the right. \n"
+        message = "the following items are available to play: use <todd play [keyword on the left]> to play the file on the right. \n"
         message = message + "\n".join(message_list)
 
         #display the message
