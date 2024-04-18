@@ -1,13 +1,13 @@
 import discord
 from discord.ext import commands
 from discord import FFmpegPCMAudio
-from config import *
+from private_config import *
 import csv
 
 #define some constants
 MOSTENIRE_PATH = 'mostenire_list.csv'
 SHAME_PATH = 'file_of_shame.txt'
-AUDIO_DIRECTORY = {'whisper':'todd_whispers.mp3'}
+AUDIO_DIRECTORY = {'whisper':'audio/todd_whispers.mp3'}
 TARGETED_USER = 'dobesquiddy'
 
 #set our intents
