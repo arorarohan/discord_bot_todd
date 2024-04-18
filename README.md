@@ -1,5 +1,5 @@
 # Todd the dog: a discord bot
-Just a bot I made to mess around with, with my friends. Not really intended to be plug-and-play for others
+Just a bot I made to mess around with, with my friends. Not really intended to be plug-and-play for others, but you're welcome to try.
 
 ## requirements
 - python3
