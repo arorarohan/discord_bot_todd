@@ -107,7 +107,30 @@ class TextCommands(commands.Cog):
         print("embedded our github repo!")
 
 
+    #command to view the hall of fame!
+    @commands.command()
+    async def hall_of_fame(self, ctx):
+        #get the contents of our hall of fame
+        with open(main.FAME_PATH,'r') as file:
+            items = list(csv.reader(file))
+        
+        #don't bother doing anything if there's nothing there
+        if len(items) == 0:
+            await ctx.send("the hall of fame is currently empty! This will activate once users start discovering gold. use <todd fetch> to play!")
+            print("tried to deliver the hall of fame, but it was empty!")
+        
+        else:
+            #split it into users and scores
+            message = []
+            for item in items:
+                message.append(f"{item[0]} --- {item[1]} ingots!")
+            
+            #make our message a string
+            message_str = "The hall of fame is a special place for a special few users who find gold! The list of inductees (unsorted because todd isn't smart enough to sort it) is:\n\n" + "\n".join(message) + "\n\n to become one of them, play <todd fetch>. Happy hunting!"
 
+            #send it
+            await ctx.send(message_str)
+            print("delivered the hall of fame!")
 
         
 

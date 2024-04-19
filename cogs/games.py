@@ -3,6 +3,8 @@
 import discord
 from discord.ext import commands
 import random
+import main
+import csv
 
 
 class Games(commands.Cog):
@@ -11,7 +13,8 @@ class Games(commands.Cog):
         #first we need our variable outside of the function.
         self.farts = 0
 
-    #game for farting and pooping.
+    ########################################################### FART GAME################################################################################################
+    #####################################################################################################################################################################
 
     @commands.command()
     async def fart(self, ctx):
@@ -44,6 +47,103 @@ class Games(commands.Cog):
                 self.farts += 1
                 await ctx.send(f"farted! I have farted {self.farts} times so far. I had a {poop_chance} chance of pooping just now, but i didn't. todd sighs in relief.")
                 print(f"farted {self.farts} times at {poop_chance}")
+
+    
+    ############################################ FETCH GAME ###################################################################################################
+    ###########################################################################################################################################################
+
+    @commands.command()
+    async def fetch(self, ctx):
+        #we want todd to be able to fetch from a variety of objects, with varying chances for each.
+        fetchables = ['stick','ball','rat','spider in a jar','nothing','gold']
+        weights = [0.3, 0.2, 0.15, 0.1, 0.2, 0.05] #probs sum to 1
+        #now let's determine which one has been fetched!
+        fetched_item = random.choices(fetchables,weights)[0]
+        
+        #different messages according to the items fetched, all are generic except for gold
+        if fetched_item == 'stick':
+            with open('assets/fetch/stick.png','rb') as image:
+                to_send = discord.File(image)
+                await ctx.send(file=to_send)
+            await ctx.send('Woof! todd just found a stick! good boy!')
+            print(f"fetched {fetched_item} with a {weights[0]} chance")
+        
+        if fetched_item == 'ball':
+            with open('assets/fetch/ball.png','rb') as image:
+                to_send = discord.File(image)
+                await ctx.send(file=to_send)
+            await ctx.send('Bark! todd just found a ball! In the distance, you see exasperated tennis players yelling slurs at todd. good dog!')
+            print(f"fetched {fetched_item} with a {weights[1]} chance")
+        
+        if fetched_item == 'rat':
+            with open('assets/fetch/rat.png','rb') as image:
+                to_send = discord.File(image)
+                await ctx.send(file=to_send)
+            await ctx.send('oh no! todd just found a rat! looks like it\'s only just died. todd grins maniacally, a murderous look in his eyes, and wags his tail furiously. attaboy!')
+            print(f"fetched {fetched_item} with a {weights[2]} chance")
+
+        if fetched_item == 'spider in a jar':
+            with open('assets/fetch/spider_in_a_jar.png','rb') as image:
+                to_send = discord.File(image)
+                await ctx.send(file=to_send)
+            await ctx.send('todd wandered off into the New Mexico desert and returned with a spider in a jar. he seems emotionless and stoic, as if his mind is still out there among the dunes. i wonder what he saw...')
+            print(f"fetched {fetched_item} with a {weights[3]} chance")
+
+        if fetched_item == 'nothing':
+            await ctx.send('todd searched far and wide, and came back empty-handed. you call him a bad dog and storm off, but todd whimpers and follows you closely. he may not be smart, but he sure is loyal.')
+            print(f"fetched {fetched_item} with a {weights[4]} chance")
+
+        #if todd fetches gold, we want to induct the user to the hall of fame along with their score.
+        if fetched_item == 'gold':
+            print(f"fetched {fetched_item} with a {weights[5]} chance")
+
+            #now for the hall of fame bit
+            #grab the username
+            username = ctx.message.author.name
+
+            #first see if our user already exists in the hall of fame
+            with open(main.FAME_PATH,'r') as file:
+                items = list(csv.reader(file))
+            
+            idx_to_change = -1
+            for row_idx in range(len(items)):
+                if items[row_idx][0] == username:
+                    idx_to_change = row_idx
+                    break
+            
+            #if we found the username in our list, idx_to_change would be >= 0.
+            #in the case that the user is a first-timer to our list, we want to add them as a new row:
+            if idx_to_change < 0:
+                with open(main.FAME_PATH,'a',newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow([username, '1'])
+                print("added the user to HOF as a new entry")
+                
+            
+            #in the case that the user is already in the list, we want to replace the list with a new set of items that has the row with our user updated:
+            else:
+                #update our value
+                new_number = int(items[idx_to_change][1]) + 1
+                items[idx_to_change][1] = str(new_number)
+
+                #write it to the file
+                with open(main.FAME_PATH,'w',newline='') as file:
+                    writer = csv.writer(file)
+                    
+                    for item in items:
+                        writer.writerow(item)
+                print("updated the user's score!")
+
+            #and now for our output!
+            with open('assets/fetch/gold.png','rb') as image:
+                to_send = discord.File(image)
+                await ctx.send(file=to_send)
+            await ctx.send('Bark! Yap! Run in circles! jubilation! todd just found a bar of gold! he drops it and it lands squarely on your big toe, and you convulse in pain on the ground, grinning with pride as todd licks your face enthusiastically. \nYour score has been inducted into the hall of fame! Use <todd hall_of_fame> to see highscores.')
+
+
+
+
+        
 
 
 #this must be present at the end of every cog file to make it work

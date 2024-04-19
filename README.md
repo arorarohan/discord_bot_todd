@@ -15,7 +15,7 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 - mostenire_add - adds mostenires to the list.
 - file_of_shame - prints the file of shame, a list of messages sent by TARGETED_USER
 - github - embeds the github repo for todd!
-- fart - todd will fart, after 3 farts he will start having a growing chance to poop. If he poops, the chance will reset.
+- hall_of_fame - displays the current standings in the hall of fame
 
 ### audio commands
 - join - joins the voice channel of the user who sent the message
@@ -25,6 +25,10 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 - resume - resume playback
 - leave - leave the voice channel
 - playlist - display the playlist of items to play
+
+### games
+ - fart - todd will fart, after 3 farts he will start having a growing chance to poop. If he poops, the chance will reset.
+ - fetch - todd will fetch an object and bring it to you. If he finds gold, you get into the hall of fame!
 
 ## usage - events
 - on_member_join - will greet new members in WELCOME_CHANNEL
