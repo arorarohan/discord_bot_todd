@@ -8,6 +8,7 @@ import asyncio
 #define some constants
 MOSTENIRE_PATH = 'lists/mostenire_list.csv'
 SHAME_PATH = 'lists/file_of_shame.txt'
+FAME_PATH = 'lists/hall_of_fame.csv'
 
 AUDIO_DIRECTORY = {
     'whisper':'audio/todd_whispers.mp3',
@@ -22,7 +23,7 @@ def run():
     intents.message_content = True
 
     #initialize the client, set the prefix for bot commands to be 'todd '.
-    client = commands.Bot(command_prefix='todd ', intents=intents)
+    client = commands.Bot(command_prefix=['todd ', 'Todd '], intents=intents)
 
     #once the bot has connected, set it up and let the host know it's ready
     @client.event
