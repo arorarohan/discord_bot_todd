@@ -11,7 +11,6 @@ load_dotenv()
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 WELCOME_CHANNEL = os.getenv('WELCOME_CHANNEL')
 TARGETED_USER = os.getenv('TARGETED_USER')
-print(TARGETED_USER)
 
 #define some constants
 MOSTENIRE_PATH = 'lists/mostenire_list.csv'

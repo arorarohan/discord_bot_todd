@@ -175,12 +175,65 @@ class Games(commands.Cog):
                 await ctx.send(file=to_send)
             await ctx.send('Bark! Yap! Run in circles! jubilation! todd just found a bar of gold! he drops it and it lands squarely on your big toe, and you convulse in pain on the ground, grinning with pride as todd licks your face enthusiastically. \nYour score has been inducted into the hall of fame! Use <todd hall_of_fame> to see highscores.')
 
+    ##################################### GUESSING GAME ######################################################################################
+    #########################################################################################################################################
+
+    # todd will have a number (1-100) in his head. You need to guess what it is!
+    # todd will tell you if you're higher or lower than the answer. Your score is the number of guesses you took to get todd's number!
+    @commands.command()
+    async def guessing_game(self,ctx):
+        await ctx.send("We're going to play a guessing game! I have a number in my head between 1 and 100 inclusive. Start by taking a guess, I'll let you know if you're higher or lower!")
+        print('initiated guessing game')
+        # let it be known that this is the moment I realized that higher-lower is a shit game because the best answer is just binary search.
+        #let's first hold an answer in our head
+        answer = random.randint(1,100)
+        
+        #define a checking function for our guesses: just check that the author is the person that initiated the interaction, and they have given us an integer.
+        def check(m):
+            #try converting the message to an integer. If it doesn't work, it means the message wasn't an integer
+            try:
+                content = int(m.content)
+            except ValueError:
+                content = m.content
+            return m.author.name == ctx.author.name and isinstance(content, int)
+        
+        #get our firt guess
+        guess_msg = await self.client.wait_for('message', check=check)
+        guess = int(guess_msg.content)
+        score = 1
+        
+        while guess != answer:
+            #wait for messages to be received, collect them only if they pass the checks
+            if guess > answer:
+                await ctx.send("your guess was higher than the answer! go lower")
+                print(f'wrong guess, {guess} > {answer}')
+            else:
+                await ctx.send('your guess was lower than the answer! go higher')
+                print(f'wrong guess, {guess} < {answer}')
+            
+            # get our next guess and increment the score
+            guess_msg = await self.client.wait_for('message', check=check)
+            guess = int(guess_msg.content)
+            score += 1
+        
+        #exiting the while loop means we got the answer! later, let's use this space to choose a cute image to send depending on how well the user did.
+            # if score < x then blablabla, elif blablabla
+        
+        #also, we still need a way for the user to abort the game, and for the game to timeout so it doesn't run in perpetuity if the user gives up.
+        #we also need a way to prevent the same user from starting the game if they are already playing one instance of the game.
+
+        #finally, end by informing the user of their score
+        await ctx.send(f'you got it in {score} guesses!')
+        print(f'guessing game ended as {guess} = {answer}, score = {score}')
+        #we can extend this by sending fun congratulatory/demeaning depending on the score
+
+
 
 
 
         
 
 
-#this must be present at the end of every cog file to make it work
+#this must be present at the end of every cog file to make it work. don't ask me why. it's just how it is. like how the sky is blue (when there isn't a storm, and it's daytime) and how the sky is not blue otherwise.
 async def setup(client):
     await client.add_cog(Games(client))
