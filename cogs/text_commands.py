@@ -1,6 +1,5 @@
 #this one is for all our standard-response text-based commands (non-AI)
 
-import private_config
 import discord
 from discord.ext import commands
 import main
@@ -64,7 +63,7 @@ class TextCommands(commands.Cog):
     @commands.command()
     async def file_of_shame(self, ctx):
         #don't run if there isn't an assigned user
-        if private_config.TARGETED_USER == '':
+        if main.TARGETED_USER == '':
             await ctx.send("no user assigned to the file of shame!")
             print("file of shame asked for, but no user assigned!")
         else:
@@ -74,10 +73,10 @@ class TextCommands(commands.Cog):
             
             #chuck them out if there's anything to chuck.
             if not contents == '':
-                await ctx.send(f"contents of the file of shame (assigned to user {private_config.TARGETED_USER}): \n" + contents)
+                await ctx.send(f"contents of the file of shame (assigned to user {main.TARGETED_USER}): \n" + contents)
                 print("printed the file of shame")
             else:
-                await ctx.send(f"the file of shame is assigned to {private_config.TARGETED_USER}, but is empty. todd")
+                await ctx.send(f"the file of shame is assigned to {main.TARGETED_USER}, but is empty. todd")
                 print("called an empty file of shame!")
     
 

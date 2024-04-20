@@ -2,8 +2,16 @@
 
 import discord
 from discord.ext import commands
-import private_config
 import asyncio
+from dotenv import load_dotenv
+import os
+
+#import sensitive consntants from dotenv file
+load_dotenv()
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
+WELCOME_CHANNEL = os.getenv('WELCOME_CHANNEL')
+TARGETED_USER = os.getenv('TARGETED_USER')
+print(TARGETED_USER)
 
 #define some constants
 MOSTENIRE_PATH = 'lists/mostenire_list.csv'
@@ -43,7 +51,7 @@ def run():
         print("------------------------------------")
 
     
-    client.run(private_config.DISCORD_TOKEN)
+    client.run(DISCORD_TOKEN)
 
 
 #actually run the bot!

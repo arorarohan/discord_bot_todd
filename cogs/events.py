@@ -1,7 +1,6 @@
 #this file handles events, like when users join and leave, or when the targeted useer says something
 
 from discord.ext import commands
-import private_config
 import main
 
 
@@ -14,9 +13,9 @@ class Greetings(commands.Cog):
     async def on_member_join(self, member):
         
         #do we have a welcome channel configured?
-        if private_config.WELCOME_CHANNEL is not None:
+        if main.WELCOME_CHANNEL is not None:
             #get the channel that we want to send our welcome message in
-            channel = self.client.get_channel(private_config.WELCOME_CHANNEL)
+            channel = self.client.get_channel(main.WELCOME_CHANNEL)
 
             #then send our message in that channel, and print that we have done so to the terminal.
             await channel.send("Yo dog, nice to meet you dog. I'm Todd. the dog. woof bark woof.")
@@ -30,7 +29,7 @@ class Greetings(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         #check if the message was sent by our targeted user
-        if message.author.name == private_config.TARGETED_USER:
+        if message.author.name == main.TARGETED_USER:
             
             #save the contents in our file
             with open(main.SHAME_PATH,'a') as file:
@@ -45,10 +44,10 @@ class Greetings(commands.Cog):
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         #first check if the welcome channel is configured
-        if private_config.WELCOME_CHANNEL is not None:
+        if main.WELCOME_CHANNEL is not None:
 
             #once again, first get the channel, then send our message there and tell the host it's been done.
-            channel = self.client.get_channel(private_config.WELCOME_CHANNEL)
+            channel = self.client.get_channel(main.WELCOME_CHANNEL)
             await channel.send("Goobye. Guess you weren't a real dog. I shouldn't have called you dog. Sincerely, todd the dog (a real dog)")
             print("Said goobye to a member!")
         

@@ -5,7 +5,9 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 - python3
 - discord.py library including discord.py[voice] module
 - ffmpeg installed and added to PATH
-- a private_config.py file set up. you can view private_config_example.py and follow the instructions, then change the name to private_config.py
+- python-dotenv library
+- NOTE - the above requirements can be satisfied using the requirements.txt file provided in the root folder.
+- a .env file set up. Look at "dotenv_example.py" for instructions on how to do this.
 
 
 ## usage - commands (keyword is 'todd' followed by a space)
