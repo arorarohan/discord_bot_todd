@@ -55,8 +55,8 @@ class Games(commands.Cog):
     @commands.command()
     async def fetch(self, ctx):
         #we want todd to be able to fetch from a variety of objects, with varying chances for each.
-        fetchables = ['stick','ball','rat','spider in a jar','nothing','gold']
-        weights = [0.3, 0.2, 0.15, 0.1, 0.2, 0.05] #probs sum to 1
+        fetchables = ['stick','ball','rat','spider in a jar','nothing','face_of_god','gold']
+        weights = [0.3, 0.2, 0.15, 0.1, 0.2, 0.01, 0.04] #probs sum to 1
         #now let's determine which one has been fetched!
         fetched_item = random.choices(fetchables,weights)[0]
         
@@ -92,10 +92,17 @@ class Games(commands.Cog):
         if fetched_item == 'nothing':
             await ctx.send('todd searched far and wide, and came back empty-handed. you call him a bad dog and storm off, but todd whimpers and follows you closely. he may not be smart, but he sure is loyal.')
             print(f"fetched {fetched_item} with a {weights[4]} chance")
+        
+        if fetched_item == 'face_of_god':
+            with open('assets/fetch/face_of_god.png','rb') as image:
+                to_send = discord.File(image)
+                await ctx.send(file=to_send)
+            await ctx.send('Todd stumbles back to you. Initially, you think he just failed to find anything and came back quickly, but then you look closer into his eyes. They seem to be hollow, soulless, like he\'s seen something he cannot describe to you. \"I saw the face of God,\" Todd said, \"A distant vision from behind the clouds. The heavenly bells and choir sounded, rang in my ears, a cacaphony of holiness I was unfit of witnessing. His Eye watched me, judging me.\" Todd shivers. \"I dare not envision it even now, lest I fall back into despair. What felt like seconds for you was years for me. The bells still ring. I fear they will continue to ring till I am gone. And when the last of my ashes is incinerated, and the universe breathes its last, that unceasing melody will only get louder.\"')
+            print(f'fetched {fetched_item} with {weights[5]} chance')
 
         #if todd fetches gold, we want to induct the user to the hall of fame along with their score.
         if fetched_item == 'gold':
-            print(f"fetched {fetched_item} with a {weights[5]} chance")
+            print(f"fetched {fetched_item} with a {weights[6]} chance")
 
             #now for the hall of fame bit
             #grab the username

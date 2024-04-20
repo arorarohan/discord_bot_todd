@@ -6,7 +6,7 @@ import asyncio
 from dotenv import load_dotenv
 import os
 
-#import sensitive consntants from dotenv file
+#import sensitive constants from dotenv file
 load_dotenv()
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 WELCOME_CHANNEL = os.getenv('WELCOME_CHANNEL')
