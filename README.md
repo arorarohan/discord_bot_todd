@@ -1,14 +1,15 @@
 # Todd the dog: a discord bot
 Just a bot I made to mess around with, with my friends. Not really intended to be plug-and-play for others, but you're welcome to try.
 
-## requirements
+## general requirements
 - python3
-- discord.py library including discord.py[voice] module
 - ffmpeg installed and added to PATH
-- python-dotenv library
-- NOTE - the above requirements can be satisfied using the requirements.txt file provided in the root folder.
-- a .env file set up. Look at "dotenv_example.py" for instructions on how to do this.
+- a .env file set up in the root folder of the repo. Look at "dotenv_example.py" for instructions on how to do this.
 
+## module requirements - can be automatically satisfied using requirements.txt
+- discord.py library 
+- discord.py[voice] module
+- python-dotenv module
 
 ## usage - commands (keyword is 'todd' followed by a space)
 ### text commands
