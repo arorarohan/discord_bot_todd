@@ -260,11 +260,32 @@ class Games(commands.Cog):
         
         #if we're here and there wasn't an override, it means the user completed the game!
         else:
-            #finally, end by informing the user of their score, and recording that they are no longer in game, allowing them to start a new one!
+            #choose an image to send according to the score
+            #<=2 = star
+            if score <= 2:
+                with open('assets/guessing_game/star.png','rb') as image:
+                    to_send = discord.File(image)
+                    await ctx.send(file=to_send)
+            #<=5 = smiley
+            elif score <= 5:
+                with open('assets/guessing_game/smiley.png','rb') as image:
+                    to_send = discord.File(image)
+                    await ctx.send(file=to_send)
+            #<=8 = neutral face
+            elif score <= 8:
+                with open('assets/guessing_game/neutral.png','rb') as image:
+                    to_send = discord.File(image)
+                    await ctx.send(file=to_send)
+            else:
+                with open('assets/guessing_game/frowny.png','rb') as image:
+                    to_send = discord.File(image)
+                    await ctx.send(file=to_send)
+            #else = frowny
+
+            #then send the result message
             await ctx.send(f'you got it in {score} guesses!')
             print(f'guessing game ended as {guess} = {answer}, score = {score}')
             self.ongoing_guessing_games[ctx.author.name] = False
-            #we can extend this by sending fun congratulatory/demeaning messages and images depending on the score
 
 
 
