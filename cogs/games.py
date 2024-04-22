@@ -10,8 +10,9 @@ import csv
 class Games(commands.Cog):
     def __init__(self, client):
         self.client = client
-        #first we need our variable outside of the function.
+        #use instance variables to store things that we want to track across multiple command calls.
         self.farts = 0
+        self.ongoing_guessing_games = {}
 
     ########################################################### FART GAME################################################################################################
     #####################################################################################################################################################################
@@ -182,7 +183,24 @@ class Games(commands.Cog):
     # todd will tell you if you're higher or lower than the answer. Your score is the number of guesses you took to get todd's number!
     @commands.command()
     async def guessing_game(self,ctx):
-        await ctx.send("We're going to play a guessing game! I have a number in my head between 1 and 100 inclusive. Start by taking a guess, I'll let you know if you're higher or lower!")
+
+        #check if this user is in the dictionary, and if so, check if they are playing the game. This block is to prevent a single user playing multiple instances of the game simultaneously.
+        if ctx.author.name in self.ongoing_guessing_games.keys():
+            
+            #if they are already playing the game, ask them to continue and don't proceed to execute the rest of the method. If they aren't, we just continue
+            if self.ongoing_guessing_games[ctx.author.name] == True:
+                await ctx.send('you are already playing the game! Make a guess to continue playing.')
+                print('could not start the game as the user is already playing')
+                #return from the method to prevent the rest of the code from executing.
+                return
+    
+        #if we made it past that block, it means either the user isn't in the dict or they have played before but aren't currently playing. Either way, we are good to go.
+        #let's start by recording that this user's game has started, and initializing our overriden variable
+        overridden = False
+        self.ongoing_guessing_games[ctx.author.name] = True
+
+        #now let's prompt the user to start the game!
+        await ctx.send("We're going to play a guessing game! I have an integer in my head between 1 and 100 inclusive. Start by taking a guess, I'll let you know if you're higher or lower! Note: I'll ignore you if you don't give me an integer. Type <cancel> to end the game at any time.")
         print('initiated guessing game')
         # let it be known that this is the moment I realized that higher-lower is a shit game because the best answer is just binary search.
         #let's first hold an answer in our head
@@ -190,42 +208,63 @@ class Games(commands.Cog):
         
         #define a checking function for our guesses: just check that the author is the person that initiated the interaction, and they have given us an integer.
         def check(m):
-            #try converting the message to an integer. If it doesn't work, it means the message wasn't an integer
-            try:
-                content = int(m.content)
-            except ValueError:
-                content = m.content
-            return m.author.name == ctx.author.name and isinstance(content, int)
-        
-        #get our firt guess
-        guess_msg = await self.client.wait_for('message', check=check)
-        guess = int(guess_msg.content)
-        score = 1
-        
-        while guess != answer:
-            #wait for messages to be received, collect them only if they pass the checks
-            if guess > answer:
-                await ctx.send("your guess was higher than the answer! go lower")
-                print(f'wrong guess, {guess} > {answer}')
-            else:
-                await ctx.send('your guess was lower than the answer! go higher')
-                print(f'wrong guess, {guess} < {answer}')
+            #check if the user is trying to override, and let the message pass through if they are
+            if m.content == 'cancel':
+                return True
             
-            # get our next guess and increment the score
-            guess_msg = await self.client.wait_for('message', check=check)
+            #if not, we proceed to check the validity of the message
+            else:
+                #try converting the message to an integer. If it doesn't work, it means the message wasn't an integer
+                try:
+                    content = int(m.content)
+                except ValueError:
+                    content = m.content
+                return m.author.name == ctx.author.name and isinstance(content, int)
+        
+        #get our first guess
+        guess_msg = await self.client.wait_for('message', check=check)
+        
+        #check if the user is trying to cancel
+        if guess_msg.content == 'cancel':
+            overridden = True
+        #if they aren't, we kickstart the game
+        else:
             guess = int(guess_msg.content)
-            score += 1
+            score = 1
         
-        #exiting the while loop means we got the answer! later, let's use this space to choose a cute image to send depending on how well the user did.
-            # if score < x then blablabla, elif blablabla
+        #for some dumb reason if we don't check this BEFORE the loop, then if the user cancelled the game as their initial 'guess', we just get stuck here, neither entering nor skipping the while loop.
+        if overridden == False:
+            while (guess != answer) and (overridden == False):
+                #give feedback on the answer
+                if guess > answer:
+                    await ctx.send("your guess was higher than the answer! go lower. Or use <cancel> to give up.")
+                    print(f'wrong guess, {guess} > {answer}')
+                else:
+                    await ctx.send('your guess was lower than the answer! go higher. Or use <cancel> to give up.')
+                    print(f'wrong guess, {guess} < {answer}')
+                
+                # get our next guess and increment the score if the user isn't trying to override.
+                guess_msg = await self.client.wait_for('message', check=check)
+                if guess_msg.content == 'cancel':
+                    overridden = True
+                else:
+                    guess = int(guess_msg.content)
+                    score += 1
         
-        #also, we still need a way for the user to abort the game, and for the game to timeout so it doesn't run in perpetuity if the user gives up.
-        #we also need a way to prevent the same user from starting the game if they are already playing one instance of the game.
-
-        #finally, end by informing the user of their score
-        await ctx.send(f'you got it in {score} guesses!')
-        print(f'guessing game ended as {guess} = {answer}, score = {score}')
-        #we can extend this by sending fun congratulatory/demeaning depending on the score
+        #exiting the while loop means either we got the answer, or the user tried to override! 
+        #if the user performed an override, we end the game here.
+        if overridden:
+            await ctx.send('game cancelled!')
+            print('guessing game cancelled by user!')
+            self.ongoing_guessing_games[ctx.author.name] = False
+        
+        #if we're here and there wasn't an override, it means the user completed the game!
+        else:
+            #finally, end by informing the user of their score, and recording that they are no longer in game, allowing them to start a new one!
+            await ctx.send(f'you got it in {score} guesses!')
+            print(f'guessing game ended as {guess} = {answer}, score = {score}')
+            self.ongoing_guessing_games[ctx.author.name] = False
+            #we can extend this by sending fun congratulatory/demeaning messages and images depending on the score
 
 
 
