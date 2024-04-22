@@ -32,6 +32,7 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 ### games
  - fart - todd will fart, after 3 farts he will start having a growing chance to poop. If he poops, the chance will reset.
  - fetch - todd will fetch an object and bring it to you. If he finds gold, you get into the hall of fame!
+ - guessing_gmae - basically higher/lower. Keep guessing till you get the number todd is thinking of!
 
 ## usage - events
 - on_member_join - will greet new members in WELCOME_CHANNEL
