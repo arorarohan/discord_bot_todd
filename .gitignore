@@ -1,5 +1,5 @@
 .env
 discord_bot_env
 __pycache__
-lists/file_of_shame.txt
+lists
 todo.md

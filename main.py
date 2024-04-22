@@ -24,6 +24,18 @@ AUDIO_DIRECTORY = {
 
 
 def run():
+    #create required files if they don't exist
+    if not os.path.exists(FAME_PATH):
+        with open(FAME_PATH,'w',newline='') as file:
+            file.close()
+    if not os.path.exists(SHAME_PATH):
+        with open(SHAME_PATH,'w') as file:
+            file.close()
+    if not os.path.exists(MOSTENIRE_PATH):
+        with open(MOSTENIRE_PATH,'w') as file:
+            file.close()
+
+
     #set our intents
     intents = discord.Intents.all()
     intents.members = True
