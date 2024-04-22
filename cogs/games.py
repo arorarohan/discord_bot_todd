@@ -5,7 +5,7 @@ from discord.ext import commands
 import random
 import main
 import csv
-
+import helpers
 
 class Games(commands.Cog):
     def __init__(self, client):
@@ -55,39 +55,45 @@ class Games(commands.Cog):
 
     @commands.command()
     async def fetch(self, ctx):
-        #we want todd to be able to fetch from a variety of objects, with varying chances for each.
+        #we want todd to be able to fetch from a variety of objects, with varying chances for each. format is item:[probability,value]
         fetchables = {
-            'stick':0.2,
-            'ball':0.17,
-            'rat':0.15,
-            'spider in a jar':0.07,
-            'nothing':0.2,
-            'face of god':0.01,
-            'gold':0.02,
-            'briefcase':0.08,
-            'skull':0.1,
+            'stick':[0.2, 1],
+            'ball':[0.17, 1],
+            'rat':[0.15, 2],
+            'spider in a jar':[0.07, 5],
+            'nothing':[0.2, 0],
+            'face of god':[0.01, 0],
+            'gold':[0.02, 20],
+            'briefcase':[0.08, 4],
+            'skull':[0.1,3]
             }
         
         #now let's determine which one has been fetched!
         #random.choices() does not take DictKeys or DictValues as inputs so we have to convert them to lists first.
         fetchable_items = [key for key in fetchables.keys()]
-        fetchable_weights = [value for value in fetchables.values()]
+        fetchable_weights = [value[0] for value in fetchables.values()]
         #the output of this function is a list with (in this case) 1 element, so we select the element to get a string
         fetched_item = random.choices(fetchable_items,fetchable_weights)[0]
+
+        #add the rewards to the user's balance and check what it has become
+        helpers.update_balance(ctx.author.name,fetchables[fetched_item][1])
+        new_bal = helpers.check_balance(ctx.author.name)
         
-        #different messages according to the items fetched, all follow a generic pattern except for gold
+        #different messages and rewards according to the items fetched, all follow a generic pattern except for gold
         if fetched_item == 'stick':
             with open('assets/fetch/stick.png','rb') as image:
                 to_send = discord.File(image)
                 await ctx.send(file=to_send)
             await ctx.send('Woof! todd just found a stick! good boy!')
-            print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
+            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
+            print(f"fetched {fetched_item} with a {fetchables[fetched_item][0]} chance for {fetchables[fetched_item][1]} Toddallions")
         
         elif fetched_item == 'ball':
             with open('assets/fetch/ball.png','rb') as image:
                 to_send = discord.File(image)
                 await ctx.send(file=to_send)
             await ctx.send('Bark! todd just found a ball! In the distance, you see exasperated tennis players yelling slurs at todd. good dog!')
+            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
             print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
         
         elif fetched_item == 'rat':
@@ -95,6 +101,7 @@ class Games(commands.Cog):
                 to_send = discord.File(image)
                 await ctx.send(file=to_send)
             await ctx.send('oh no! todd just found a rat! looks like it\'s only just died. todd grins maniacally, a murderous look in his eyes, and wags his tail furiously. attaboy!')
+            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
             print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
 
         elif fetched_item == 'spider in a jar':
@@ -102,6 +109,7 @@ class Games(commands.Cog):
                 to_send = discord.File(image)
                 await ctx.send(file=to_send)
             await ctx.send('todd wandered off into the New Mexico desert and returned with a spider in a jar. he seems emotionless and stoic, as if his mind is still out there among the dunes. i wonder what he saw...')
+            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
             print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
 
         elif fetched_item == 'nothing':
@@ -120,6 +128,7 @@ class Games(commands.Cog):
                 to_send = discord.File(image)
                 await ctx.send(file=to_send)
             await ctx.send('Hmm... todd just found a strange, black briefcase. Maybe best not to open it for now.')
+            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
             print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
         
         elif fetched_item == 'skull':
@@ -127,6 +136,7 @@ class Games(commands.Cog):
                 to_send = discord.File(image)
                 await ctx.send(file=to_send)
             await ctx.send('Todd comes trotting up to you with a human skull!')
+            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
             print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
 
         #if todd fetches gold, we want to induct the user to the hall of fame along with their score.
@@ -175,6 +185,7 @@ class Games(commands.Cog):
                 to_send = discord.File(image)
                 await ctx.send(file=to_send)
             await ctx.send('Bark! Yap! Run in circles! jubilation! todd just found a bar of gold! he drops it and it lands squarely on your big toe, and you convulse in pain on the ground, grinning with pride as todd licks your face enthusiastically. \nYour score has been inducted into the hall of fame! Use <todd hall_of_fame> to see highscores.')
+            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
 
     ##################################### GUESSING GAME ######################################################################################
     #########################################################################################################################################
@@ -286,12 +297,6 @@ class Games(commands.Cog):
             await ctx.send(f'you got it in {score} guesses!')
             print(f'guessing game ended as {guess} = {answer}, score = {score}')
             self.ongoing_guessing_games[ctx.author.name] = False
-
-
-
-
-
-        
 
 
 #this must be present at the end of every cog file to make it work. don't ask me why. it's just how it is. like how the sky is blue (when there isn't a storm, and it's daytime) and how the sky is not blue otherwise.

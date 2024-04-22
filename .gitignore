@@ -4,4 +4,6 @@ __pycache__
 lists/hall_of_fame.csv
 lists/mostenire_list.csv
 lists/file_of_shame.txt
+lists/inventory.csv
+lists/toddallions.csv
 todo.md
