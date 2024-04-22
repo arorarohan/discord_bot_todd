@@ -1,5 +1,7 @@
 .env
 discord_bot_env
 __pycache__
-lists
+lists/hall_of_fame.csv
+lists/mostenire_list.csv
+lists/file_of_shame.txt
 todo.md
