@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 import main
 import helpers
+import csv
 
 class Shopping(commands.Cog):
     def __init__(self, client):
@@ -80,6 +81,46 @@ class Shopping(commands.Cog):
         message = "your inventory contains: \n\n" + "\n".join(items_list) + "\n\nWant more items? Buy them in the shop with <todd shop>!"
         await ctx.send(message)
         print(f'displayed inventory of {ctx.author.name}!')
+    
+    #command to view the net worth leaderboard
+    @commands.command()
+    async def leaderboard(self,ctx):
+        #get everything from the csv in a list
+        with open(main.TODDALLIONS_PATH,'r') as file:
+            items = list(csv.reader(file))
+
+        #now let's factor in net worth for each user by checking inventory!
+        net_worth_list = []
+        for i in range(len(items)):
+            #get the list of items owned by the user
+            username = items[i][0]
+            owned_items = helpers.get_inventory_list(username)
+            
+            #get the sum of values of these items
+            assets_value = 0
+            #only bother to sum assets value if there are any assets to sum.
+            if not owned_items == []:
+                for item in owned_items:
+                    item_value = self.shop_items[item]
+                    assets_value += item_value
+        
+            #calculate net worth
+            net_worth = int(items[i][1]) + assets_value
+            
+            #add it to the list
+            net_worth_list.append([username, net_worth])
+        
+        #once we have our full list, let's sort it before we display
+        sorted_list = helpers.sort_toddalions(net_worth_list)
+        
+        #time to construct our output message
+        #make a list of strings to print: each line is a string with an index number (starting from 1) followed by the username, followed by the number of coins!
+        lines = [f'{i+1}. {sorted_list[i][0]} --- {sorted_list[i][1]} toddallions' for i in range(len(sorted_list))]
+        
+        #make a message string to display and send it
+        message = "Net worth leaderboard (inclusive of toddallions and purchased items): \n\n" + "\n".join(lines) + "\n\nTo climb, grind toddallions with <todd fetch>!"
+        await ctx.send(message)
+        print('delivered the leaderboard!')
 
 
 #this must be present at the end of every cog file to make it work. don't ask me why. it's just how it is. like how the sky is blue (when there isn't a storm, and it's daytime) and how the sky is not blue otherwise.

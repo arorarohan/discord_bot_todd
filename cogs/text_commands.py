@@ -131,7 +131,6 @@ class TextCommands(commands.Cog):
             await ctx.send(message_str)
             print("delivered the hall of fame!")
 
-        
 
 #this must be present at the end of every cog file to make it work
 async def setup(client):
