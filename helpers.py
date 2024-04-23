@@ -154,3 +154,41 @@ def sort_toddalions(to_sort: list):
     
     #now that we are done, let's return our list!
     return sorted_list
+
+
+#function for adding items to the hall of fame
+def add_to_hof(username: str):
+    
+    #get the currently existing items in the file
+    with open(main.FAME_PATH,'r') as file:
+                items = list(csv.reader(file))
+
+    #find the index that we need to change   
+    idx_to_change = -1
+    for row_idx in range(len(items)):
+        if items[row_idx][0] == username:
+            idx_to_change = row_idx
+            break
+            
+    #if we found the username in our list, idx_to_change would be >= 0.
+    #in the case that the user is a first-timer to our list, we want to add them as a new row:
+    if idx_to_change < 0:
+        items.append([username,1])
+                
+            
+            #in the case that the user is already in the list, we want to update the element that has the username in it:
+    else:
+        #update our value
+        new_number = int(items[idx_to_change][1]) + 1
+        items[idx_to_change][1] = str(new_number)
+
+    #now we have added our element to the list, we need to re-sort the list. We can use the sort_toddallions function to do this as the list is of the same format
+    sorted_items = sort_toddalions(items)
+
+    #rewrite the file with our new list
+    with open(main.FAME_PATH,'w',newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(sorted_items)
+    
+    #return from the function once done
+    return

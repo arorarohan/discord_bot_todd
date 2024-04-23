@@ -125,7 +125,7 @@ class TextCommands(commands.Cog):
                 message.append(f"{item[0]} --- {item[1]} ingots!")
             
             #make our message a string
-            message_str = "The hall of fame is a special place for a special few users who find gold! The list of inductees (unsorted because todd isn't smart enough to sort it) is:\n\n" + "\n".join(message) + "\n\n to become one of them, play <todd fetch>. Happy hunting!"
+            message_str = "The hall of fame is a special place for a special few users who find gold! The list of inductees is:\n\n" + "\n".join(message) + "\n\n to become one of them, play <todd fetch>. Happy hunting!"
 
             #send it
             await ctx.send(message_str)

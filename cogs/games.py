@@ -55,137 +55,50 @@ class Games(commands.Cog):
 
     @commands.command()
     async def fetch(self, ctx):
-        #we want todd to be able to fetch from a variety of objects, with varying chances for each. format is item:[probability,value]
+        #we want todd to be able to fetch from a variety of objects, with varying chances for each.
         fetchables = {
-            'stick':[0.2, 1],
-            'ball':[0.17, 1],
-            'rat':[0.15, 2],
-            'spider in a jar':[0.07, 5],
-            'nothing':[0.2, 0],
-            'face of god':[0.01, 0],
-            'gold':[0.02, 20],
-            'briefcase':[0.08, 4],
-            'skull':[0.1,3]
+            'stick':{'probability':0.2, 'value':1, 'image':'assets/fetch/stick.png', 'message':'Woof! todd just found a stick! good boy!'},
+            'ball':{'probability':0.17, 'value':1, 'image':'assets/fetch/ball.png', 'message':'Bark! todd just found a ball! In the distance, you see exasperated tennis players yelling slurs at todd. good dog!'},
+            'rat':{'probability':0.15, 'value':2, 'image':'assets/fetch/rat.png', 'message':'oh no! todd just found a rat! looks like it\'s only just died. todd grins maniacally, a murderous look in his eyes, and wags his tail furiously. attaboy!'},
+            'spider in a jar':{'probability':0.07, 'value':5, 'image':'assets/fetch/spider_in_a_jar.png', 'message':'todd wandered off into the New Mexico desert and returned with a spider in a jar. he seems emotionless and stoic, as if his mind is still out there among the dunes. i wonder what he saw...'},
+            'nothing':{'probability':0.2, 'value':None, 'image':None, 'message':'todd searched far and wide, and came back empty-handed. you call him a bad dog and storm off, but todd whimpers and follows you closely. he may not be smart, but he sure is loyal.'},
+            'face of god':{'probability':0.01, 'value':None, 'image':'assets/fetch/face_of_god.png', 'message':'Todd stumbles back to you. Initially, you think he just failed to find anything and came back quickly, but then you look closer into his eyes. They seem to be hollow, soulless, like he\'s seen something he cannot describe to you. \"I saw the face of God,\" Todd said, \"A distant vision from behind the clouds. The heavenly bells and choir sounded, rang in my ears, a cacaphony of holiness I was unfit of witnessing. His Eye watched me, judging me.\" Todd shivers. \"I dare not envision it even now, lest I fall back into despair. What felt like seconds for you was years for me. The bells still ring. I fear they will continue to ring till I am gone. And when the last of my ashes is incinerated, and the universe breathes its last, that unceasing melody will only get louder.\"'},
+            'gold':{'probability':0.02, 'value':20, 'image':'assets/fetch/gold.png', 'message':'Bark! Yap! Run in circles! jubilation! todd just found a bar of gold! he drops it and it lands squarely on your big toe, and you convulse in pain on the ground, grinning with pride as todd licks your face enthusiastically. \nYour score has been inducted into the hall of fame! Use <todd hall_of_fame> to see highscores.'},
+            'briefcase':{'probability':0.08, 'value':4, 'image':'assets/fetch/briefcase.png', 'message':'Hmm... todd just found a strange, black briefcase. Maybe best not to open it for now.'},
+            'skull':{'probability':0.1, 'value':3, 'image':'assets/fetch/skull.png', 'message':'Todd comes trotting up to you with a human skull!'},
             }
         
         #now let's determine which one has been fetched!
         #random.choices() does not take DictKeys or DictValues as inputs so we have to convert them to lists first.
         fetchable_items = [key for key in fetchables.keys()]
-        fetchable_weights = [value[0] for value in fetchables.values()]
+        fetchable_weights = [value['probability'] for value in fetchables.values()]
         #the output of this function is a list with (in this case) 1 element, so we select the element to get a string
         fetched_item = random.choices(fetchable_items,fetchable_weights)[0]
-
-        #add the rewards to the user's balance and check what it has become
-        helpers.update_balance(ctx.author.name,fetchables[fetched_item][1])
-        new_bal = helpers.check_balance(ctx.author.name)
         
-        #different messages and rewards according to the items fetched, all follow a generic pattern except for gold
-        if fetched_item == 'stick':
-            with open('assets/fetch/stick.png','rb') as image:
+        #add the user to the hall of fame if they got gold
+        if fetched_item == 'gold':
+            helpers.add_to_hof(ctx.author.name)
+            print('added the user to hall of fame!')
+
+        #update their balance according to what they got, if their is something to add
+        if fetchables[fetched_item]['value'] is not None:
+            helpers.update_balance(ctx.author.name,fetchables[fetched_item]['value'])
+            new_bal = helpers.check_balance(ctx.author.name)
+
+        #send an image according to the fetched item, if there is one
+        if fetchables[fetched_item]['image'] is not None:
+            with open(fetchables[fetched_item]['image'],'rb') as image:
                 to_send = discord.File(image)
                 await ctx.send(file=to_send)
-            await ctx.send('Woof! todd just found a stick! good boy!')
-            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
-            print(f"fetched {fetched_item} with a {fetchables[fetched_item][0]} chance for {fetchables[fetched_item][1]} Toddallions")
         
-        elif fetched_item == 'ball':
-            with open('assets/fetch/ball.png','rb') as image:
-                to_send = discord.File(image)
-                await ctx.send(file=to_send)
-            await ctx.send('Bark! todd just found a ball! In the distance, you see exasperated tennis players yelling slurs at todd. good dog!')
-            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
-            print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
-        
-        elif fetched_item == 'rat':
-            with open('assets/fetch/rat.png','rb') as image:
-                to_send = discord.File(image)
-                await ctx.send(file=to_send)
-            await ctx.send('oh no! todd just found a rat! looks like it\'s only just died. todd grins maniacally, a murderous look in his eyes, and wags his tail furiously. attaboy!')
-            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
-            print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
+        #send the message according to what was fetched.
+        await ctx.send(fetchables[fetched_item]['message'])
+        print(f"fetched {fetched_item} with a {fetchables[fetched_item]['probability']} chance for {fetchables[fetched_item]['value']} Toddallions")
 
-        elif fetched_item == 'spider in a jar':
-            with open('assets/fetch/spider_in_a_jar.png','rb') as image:
-                to_send = discord.File(image)
-                await ctx.send(file=to_send)
-            await ctx.send('todd wandered off into the New Mexico desert and returned with a spider in a jar. he seems emotionless and stoic, as if his mind is still out there among the dunes. i wonder what he saw...')
-            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
-            print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
+        #send toddallions message only if toddallions were added
+        if fetchables[fetched_item]['value'] is not None:
+            await ctx.send("you earned {0} toddallions! Balance: {1}".format(fetchables[fetched_item]['value'], new_bal))
 
-        elif fetched_item == 'nothing':
-            await ctx.send('todd searched far and wide, and came back empty-handed. you call him a bad dog and storm off, but todd whimpers and follows you closely. he may not be smart, but he sure is loyal.')
-            print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
-        
-        elif fetched_item == 'face of god':
-            with open('assets/fetch/face_of_god.png','rb') as image:
-                to_send = discord.File(image)
-                await ctx.send(file=to_send)
-            await ctx.send('Todd stumbles back to you. Initially, you think he just failed to find anything and came back quickly, but then you look closer into his eyes. They seem to be hollow, soulless, like he\'s seen something he cannot describe to you. \"I saw the face of God,\" Todd said, \"A distant vision from behind the clouds. The heavenly bells and choir sounded, rang in my ears, a cacaphony of holiness I was unfit of witnessing. His Eye watched me, judging me.\" Todd shivers. \"I dare not envision it even now, lest I fall back into despair. What felt like seconds for you was years for me. The bells still ring. I fear they will continue to ring till I am gone. And when the last of my ashes is incinerated, and the universe breathes its last, that unceasing melody will only get louder.\"')
-            print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
-        
-        elif fetched_item == 'briefcase':
-            with open('assets/fetch/briefcase.png','rb') as image:
-                to_send = discord.File(image)
-                await ctx.send(file=to_send)
-            await ctx.send('Hmm... todd just found a strange, black briefcase. Maybe best not to open it for now.')
-            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
-            print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
-        
-        elif fetched_item == 'skull':
-            with open('assets/fetch/skull.png','rb') as image:
-                to_send = discord.File(image)
-                await ctx.send(file=to_send)
-            await ctx.send('Todd comes trotting up to you with a human skull!')
-            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
-            print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
-
-        #if todd fetches gold, we want to induct the user to the hall of fame along with their score.
-        elif fetched_item == 'gold':
-            print(f"fetched {fetched_item} with a {fetchables[fetched_item]} chance")
-
-            #now for the hall of fame bit
-            #grab the username
-            username = ctx.message.author.name
-
-            #first see if our user already exists in the hall of fame
-            with open(main.FAME_PATH,'r') as file:
-                items = list(csv.reader(file))
-            
-            idx_to_change = -1
-            for row_idx in range(len(items)):
-                if items[row_idx][0] == username:
-                    idx_to_change = row_idx
-                    break
-            
-            #if we found the username in our list, idx_to_change would be >= 0.
-            #in the case that the user is a first-timer to our list, we want to add them as a new row:
-            if idx_to_change < 0:
-                with open(main.FAME_PATH,'a',newline='') as file:
-                    writer = csv.writer(file)
-                    writer.writerow([username, '1'])
-                print("added the user to HOF as a new entry")
-                
-            
-            #in the case that the user is already in the list, we want to replace the list with a new set of items that has the row with our user updated:
-            else:
-                #update our value
-                new_number = int(items[idx_to_change][1]) + 1
-                items[idx_to_change][1] = str(new_number)
-
-                #write it to the file
-                with open(main.FAME_PATH,'w',newline='') as file:
-                    writer = csv.writer(file)
-                    
-                    for item in items:
-                        writer.writerow(item)
-                print("updated the user's score!")
-
-            #and now for our output!
-            with open('assets/fetch/gold.png','rb') as image:
-                to_send = discord.File(image)
-                await ctx.send(file=to_send)
-            await ctx.send('Bark! Yap! Run in circles! jubilation! todd just found a bar of gold! he drops it and it lands squarely on your big toe, and you convulse in pain on the ground, grinning with pride as todd licks your face enthusiastically. \nYour score has been inducted into the hall of fame! Use <todd hall_of_fame> to see highscores.')
-            await ctx.send(f'you earned {fetchables[fetched_item][1]} toddallions! Balance: {new_bal}')
 
     ##################################### GUESSING GAME ######################################################################################
     #########################################################################################################################################
