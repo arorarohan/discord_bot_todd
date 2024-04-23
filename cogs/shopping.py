@@ -27,7 +27,7 @@ class Shopping(commands.Cog):
             lines.append(f"{key} --- {value}")
         
         #print our message, including all the lines in the list separated by newlines.
-        message = "Below are the items currently available in the shop! Prices listed in Toddallions. Use <todd buy [item_name]> to buy! (all purchases are non-refundable, non-exchangable and have no warranty) \n\n" + "\n".join(lines) + "\n\nNot enough toddallions? Play fetch to earn more!"
+        message = "Below are the items currently available in the shop! Prices listed in Toddallions. Use <todd buy [item_name]> to buy! (all purchases are non-refundable, non-exchangable and have no warranty) \n\n" + "\n".join(lines) + "\n\nNot enough toddallions? Play games to earn more! Use <todd help> to see avaiable games."
         await ctx.send(message)
         print('displayed the shop!')
 
@@ -118,7 +118,7 @@ class Shopping(commands.Cog):
         lines = [f'{i+1}. {sorted_list[i][0]} --- {sorted_list[i][1]} toddallions' for i in range(len(sorted_list))]
         
         #make a message string to display and send it
-        message = "Net worth leaderboard (inclusive of toddallions and purchased items): \n\n" + "\n".join(lines) + "\n\nTo climb, grind toddallions with <todd fetch>!"
+        message = "Net worth leaderboard (inclusive of toddallions and purchased items): \n\n" + "\n".join(lines) + "\n\nTo climb, grind toddallions by playing games! Use <todd help> to see available games."
         await ctx.send(message)
         print('delivered the leaderboard!')
 

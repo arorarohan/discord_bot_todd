@@ -38,15 +38,29 @@ class Games(commands.Cog):
 
             #act accordingly
             if will_poop:
+
+                #first dole out the user's reward
+                reward = int(poop_chance * 10)
+                helpers.update_balance(ctx.author.name,reward)
+                new_bal = helpers.check_balance(ctx.author.name)
+
+                #then give them their output
                 with open('assets/poop.png','rb') as image:
                     to_send = discord.File(image)
                     await ctx.send(file=to_send)
-                await ctx.send(f"I just pooped (had a {poop_chance} chance of doing so). todd say oops.")
+                await ctx.send(f"I just pooped (had a {int(poop_chance * 100)}% chance of doing so). todd say oops.\nYou earned {reward} toddallions! Balance: {new_bal}")
                 print(f"pooped at {poop_chance}")
+                
+                #finally, reset the game by setting farts to 0
                 self.farts = 0
+            
+            #if they aren't pooping, we process the fart
             else:
+                #increment the fart count
                 self.farts += 1
-                await ctx.send(f"farted! I have farted {self.farts} times so far. I had a {poop_chance} chance of pooping just now, but i didn't. todd sighs in relief.")
+
+                #give the user the output
+                await ctx.send(f"farted! I have farted {self.farts} times so far. I had a {int(poop_chance * 100)}% chance of pooping just now, but i didn't. todd sighs in relief.")
                 print(f"farted {self.farts} times at {poop_chance}")
 
     
@@ -185,34 +199,43 @@ class Games(commands.Cog):
         
         #if we're here and there wasn't an override, it means the user completed the game!
         else:
-            #choose an image to send according to the score
+            
+            #choose a message to send and reward to give according to the score
             #<=2 = star
             if score <= 2:
-                final_message = random.choice(["youre a genius fr br0 ","NO WAY!!SO SMARTY UWUWUWUs "])
+                reward = 15
+                feedback_message = random.choice(["youre a genius fr br0 ","NO WAY!!SO SMARTY UWUWUWUs "])
                 with open('assets/guessing_game/star.png','rb') as image:
                     to_send = discord.File(image)
                     await ctx.send(file=to_send)
             #<=5 = smiley
             elif score <= 5:
-                final_message = random.choice(["owowo not bad lad! ","okAYY OKAY we going for sth here "])
+                reward = 7
+                feedback_message = random.choice(["owowo not bad lad! ","okAYY OKAY we going for sth here "])
                 with open('assets/guessing_game/smiley.png','rb') as image:
                     to_send = discord.File(image)
                     await ctx.send(file=to_send)
             #<=8 = neutral face
             elif score <= 8:
-                final_message = random.choice(["bro u actl kinda slow haha ","meh. u could do better fr "])
+                reward = 3
+                feedback_message = random.choice(["bro u actl kinda slow haha ","meh. u could do better fr "])
                 with open('assets/guessing_game/neutral.png','rb') as image:
                     to_send = discord.File(image)
                     await ctx.send(file=to_send)
+            #else = frowny
             else:
-                final_message = random.choice(["are u even trying HAHHAHA ","eh. lame :3 "])
+                reward = 1
+                feedback_message = random.choice(["are u even trying HAHHAHA ","eh. lame :3 "])
                 with open('assets/guessing_game/frowny.png','rb') as image:
                     to_send = discord.File(image)
                     await ctx.send(file=to_send)
-            #else = frowny
+
+            #now give the appropriate reward
+            helpers.update_balance(ctx.author.name,reward)
+            new_bal = helpers.check_balance(ctx.author.name)
 
             #then send the result message
-            await ctx.send(f'you got it in {score} guesses! {final_message}')
+            await ctx.send(f'you got it in {score} guesses! {feedback_message}. \n\nYou earned {reward} toddallions. New balance: {new_bal}')
             print(f'guessing game ended as {guess} = {answer}, score = {score}')
             self.ongoing_guessing_games[ctx.author.name] = False
 
