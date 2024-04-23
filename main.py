@@ -5,6 +5,7 @@ from discord.ext import commands
 import asyncio
 from dotenv import load_dotenv
 import os
+from scripts.help_command import CustomHelpCommand
 
 #import sensitive constants from dotenv file
 load_dotenv()
@@ -58,7 +59,7 @@ def run():
     intents.message_content = True
 
     #initialize the client, set the prefix for bot commands to be 'todd '.
-    client = commands.Bot(command_prefix=['todd ', 'Todd '], intents=intents)
+    client = commands.Bot(command_prefix=['todd ', 'Todd '], intents=intents,help_command=CustomHelpCommand())
 
     #once the bot has connected, set it up and let the host know it's ready
     @client.event

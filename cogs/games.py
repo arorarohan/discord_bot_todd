@@ -5,7 +5,7 @@ from discord.ext import commands
 import random
 import main
 import csv
-import helpers
+from scripts import helpers
 
 class Games(commands.Cog):
     def __init__(self, client):
@@ -17,7 +17,7 @@ class Games(commands.Cog):
     ########################################################### FART GAME################################################################################################
     #####################################################################################################################################################################
 
-    @commands.command()
+    @commands.command(brief='make todd fart! see how long he can hold his poop')
     async def fart(self, ctx):
 
         #if farts < 3 we want to just fart without a chance of pooping.
@@ -67,7 +67,7 @@ class Games(commands.Cog):
     ############################################ FETCH GAME ###################################################################################################
     ###########################################################################################################################################################
 
-    @commands.command()
+    @commands.command(brief='todd fetches stuff! good boy')
     async def fetch(self, ctx):
         #we want todd to be able to fetch from a variety of objects, with varying chances for each.
         fetchables = {
@@ -120,7 +120,7 @@ class Games(commands.Cog):
 
     # todd will have a number (1-100) in his head. You need to guess what it is!
     # todd will tell you if you're higher or lower than the answer. Your score is the number of guesses you took to get todd's number!
-    @commands.command()
+    @commands.command(brief='guess todd\'s number!')
     async def guessing_game(self,ctx):
 
         #check if this user is in the dictionary, and if so, check if they are playing the game. This block is to prevent a single user playing multiple instances of the game simultaneously.

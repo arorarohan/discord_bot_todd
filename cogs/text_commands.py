@@ -10,14 +10,14 @@ class TextCommands(commands.Cog):
         self.client = client
     
     #hi!
-    @commands.command()
+    @commands.command(brief='says hello back')
     async def hi(self, ctx):
         #await tells us to pause the routine until the message is sent.
         await ctx.send("Hello, I am todd, todd the dog.")
         print("greeted someone!")
 
     #mostenire command to print the list of mostenires from our csv file
-    @commands.command()
+    @commands.command(brief='prints the mostenire list')
     async def mostenire_list(self, ctx):
         message_list = []
         message = ''
@@ -41,7 +41,7 @@ class TextCommands(commands.Cog):
             print("sent a string of mostenires!")
 
     #mostenire add command to add mostenires to the list
-    @commands.command()
+    @commands.command(brief='adds your contribution to the mostenire list. Use <todd mostenire_add [word]>')
     async def mostenire_add(self, ctx, arg=''):
         #don't accept an empty argument
         if not len(arg) > 0:
@@ -60,7 +60,7 @@ class TextCommands(commands.Cog):
             print(f"added {arg} to {main.MOSTENIRE_PATH}")
 
     #command to view the file of shame
-    @commands.command()
+    @commands.command(brief='view the contents of the file of shame, a mechanic to shame naughty users.')
     async def file_of_shame(self, ctx):
         #don't run if there isn't an assigned user
         if main.TARGETED_USER == '':
@@ -81,7 +81,7 @@ class TextCommands(commands.Cog):
     
 
     #command to embed a link to the github repo for this file. shamefully hardcoded, i could bother to scrape the repo for items to populate this embed but i am not bothered.
-    @commands.command()
+    @commands.command(brief='view todd\'s github. it\'s like peering into my little doggy brain.')
     async def github(self, ctx):
         
         #define the embed
@@ -107,7 +107,7 @@ class TextCommands(commands.Cog):
 
 
     #command to view the hall of fame!
-    @commands.command()
+    @commands.command(brief='view the hall of fame, a place where users who discover gold are recognized')
     async def hall_of_fame(self, ctx):
         #get the contents of our hall of fame
         with open(main.FAME_PATH,'r') as file:

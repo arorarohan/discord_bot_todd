@@ -10,7 +10,7 @@ class AudioCommands(commands.Cog):
         self.client = client
 
     #join voice channel command
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, brief='joins your call with you. i am with you.')
     async def join(self, ctx):
         #if the user running this command is in a voice channel, join the vc of the user
         if (ctx.author.voice):
@@ -26,7 +26,7 @@ class AudioCommands(commands.Cog):
             print("explained why we can't join a voice channel!")    
 
     #play sound file on-demand, take arg as the item to play
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, brief='play some music! Use <todd play [filename]>')
     async def play(self, ctx,arg=''):
         #initialize our voice
         voice = ctx.guild.voice_client
@@ -58,7 +58,7 @@ class AudioCommands(commands.Cog):
             print("failed to play a file as there is nothing to play")
     
     #pause the playback
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, brief='pauses the music. todd is sad.')
     async def pause(self, ctx):
         #call the voice client for the current server of the channel
         voice = discord.utils.get(self.client.voice_clients,guild=ctx.guild)
@@ -71,10 +71,9 @@ class AudioCommands(commands.Cog):
         else:
             await ctx.send("can't pause if i am not playing anything. i am, however, todd")
             print("failed to pause playback as there is nothing playing.")
-
     
     #resume playback
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, brief='resumes to music. todd')
     async def resume(self, ctx):
         #like before, get the voice client for the current server of the current channel.
         voice = discord.utils.get(self.client.voice_clients,guild=ctx.guild)
@@ -89,7 +88,7 @@ class AudioCommands(commands.Cog):
     
 
     #command to stop playback
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, brief='todd stop the music. sorry')
     async def stop(self, ctx):
         #we don't need to do any checks because there won't be an error if nothing to stop.
         voice = discord.utils.get(self.client.voice_clients,guild=ctx.guild)
@@ -97,7 +96,7 @@ class AudioCommands(commands.Cog):
 
     
     #command to leave the vc
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, brief='DO NOT WRITE THIS COMAND. YOU WANT ME HERE.')
     async def leave(self, ctx):
         #if the bot is already in a voice channel, leave it.
         if (ctx.voice_client):
@@ -111,7 +110,7 @@ class AudioCommands(commands.Cog):
 
     
     #we need a playlist to show the user what files we have and how to call them
-    @commands.command()
+    @commands.command(brief='shows all songs todd can sing')
     async def playlist(self, ctx):
         #if we don't have anything in the playlist, say so!
         if main.AUDIO_DIRECTORY == {}:

@@ -2,7 +2,7 @@
 import discord
 from discord.ext import commands
 import main
-import helpers
+from scripts import helpers
 import csv
 
 class Shopping(commands.Cog):
@@ -18,7 +18,7 @@ class Shopping(commands.Cog):
         }
 
     #view the shop
-    @commands.command()
+    @commands.command(brief='spend money get pretty. see how you can spend your toddallions')
     async def shop(self,ctx):
 
         #get all the shop items as lines in a list
@@ -33,7 +33,7 @@ class Shopping(commands.Cog):
 
 
     # check balance
-    @commands.command()
+    @commands.command(brief='u rich or u poor? now u can see')
     async def balance(self, ctx):
         bal = helpers.check_balance(ctx.author.name)
         await ctx.send(f"your balance is {bal} toddallions!")
@@ -41,7 +41,7 @@ class Shopping(commands.Cog):
 
 
     #buy items
-    @commands.command()
+    @commands.command(brief='get stuff! toddsumerism. use <todd buy [item from shop]>')
     async def buy(self,ctx,arg=''):
         #don't accept an empty argument.
         if arg == '':
@@ -72,7 +72,7 @@ class Shopping(commands.Cog):
 
 
     #check inventory
-    @commands.command()
+    @commands.command(brief='what do you have? can todd have some?')
     async def inventory(self,ctx):
         #use the function we made in helpers.py to fetch a list of items this user owns!
         items_list = helpers.get_inventory_list(ctx.author.name)
@@ -83,7 +83,7 @@ class Shopping(commands.Cog):
         print(f'displayed inventory of {ctx.author.name}!')
     
     #command to view the net worth leaderboard
-    @commands.command()
+    @commands.command(brief='view the most wealthy members of the todd family!')
     async def leaderboard(self,ctx):
         #get everything from the csv in a list
         with open(main.TODDALLIONS_PATH,'r') as file:
