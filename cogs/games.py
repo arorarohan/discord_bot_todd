@@ -61,11 +61,12 @@ class Games(commands.Cog):
             'ball':{'probability':0.17, 'value':1, 'image':'assets/fetch/ball.png', 'message':'Bark! todd just found a ball! In the distance, you see exasperated tennis players yelling slurs at todd. good dog!'},
             'rat':{'probability':0.15, 'value':2, 'image':'assets/fetch/rat.png', 'message':'oh no! todd just found a rat! looks like it\'s only just died. todd grins maniacally, a murderous look in his eyes, and wags his tail furiously. attaboy!'},
             'spider in a jar':{'probability':0.07, 'value':5, 'image':'assets/fetch/spider_in_a_jar.png', 'message':'todd wandered off into the New Mexico desert and returned with a spider in a jar. he seems emotionless and stoic, as if his mind is still out there among the dunes. i wonder what he saw...'},
-            'nothing':{'probability':0.2, 'value':None, 'image':None, 'message':'todd searched far and wide, and came back empty-handed. you call him a bad dog and storm off, but todd whimpers and follows you closely. he may not be smart, but he sure is loyal.'},
+            'nothing':{'probability':0.12, 'value':None, 'image':None, 'message':'todd searched far and wide, and came back empty-handed. you call him a bad dog and storm off, but todd whimpers and follows you closely. he may not be smart, but he sure is loyal.'},
             'face of god':{'probability':0.01, 'value':None, 'image':'assets/fetch/face_of_god.png', 'message':'Todd stumbles back to you. Initially, you think he just failed to find anything and came back quickly, but then you look closer into his eyes. They seem to be hollow, soulless, like he\'s seen something he cannot describe to you. \"I saw the face of God,\" Todd said, \"A distant vision from behind the clouds. The heavenly bells and choir sounded, rang in my ears, a cacaphony of holiness I was unfit of witnessing. His Eye watched me, judging me.\" Todd shivers. \"I dare not envision it even now, lest I fall back into despair. What felt like seconds for you was years for me. The bells still ring. I fear they will continue to ring till I am gone. And when the last of my ashes is incinerated, and the universe breathes its last, that unceasing melody will only get louder.\"'},
             'gold':{'probability':0.02, 'value':20, 'image':'assets/fetch/gold.png', 'message':'Bark! Yap! Run in circles! jubilation! todd just found a bar of gold! he drops it and it lands squarely on your big toe, and you convulse in pain on the ground, grinning with pride as todd licks your face enthusiastically. \nYour score has been inducted into the hall of fame! Use <todd hall_of_fame> to see highscores.'},
             'briefcase':{'probability':0.08, 'value':4, 'image':'assets/fetch/briefcase.png', 'message':'Hmm... todd just found a strange, black briefcase. Maybe best not to open it for now.'},
             'skull':{'probability':0.1, 'value':3, 'image':'assets/fetch/skull.png', 'message':'Todd comes trotting up to you with a human skull!'},
+            'your mother': {'probability':0.08, 'value':4, 'image':'assets/fetch/your_mother.png', 'message':'Todd yelps and comes whimpering back. He found your mother! She sends you both back to your room, but some coins fall out of her pocket as she turns away.'}
             }
         
         #now let's determine which one has been fetched!
@@ -133,7 +134,7 @@ class Games(commands.Cog):
         #define a checking function for our guesses: just check that the author is the person that initiated the interaction, and they have given us an integer.
         def check(m):
             #check if the user is trying to override, and let the message pass through if they are
-            if m.content == 'cancel':
+            if m.content == 'cancel' and ctx.author.name == m.author.name:
                 return True
             
             #if not, we proceed to check the validity of the message
