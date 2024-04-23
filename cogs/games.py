@@ -188,27 +188,31 @@ class Games(commands.Cog):
             #choose an image to send according to the score
             #<=2 = star
             if score <= 2:
+                final_message = random.choice(["youre a genius fr br0 ","NO WAY!!SO SMARTY UWUWUWUs "])
                 with open('assets/guessing_game/star.png','rb') as image:
                     to_send = discord.File(image)
                     await ctx.send(file=to_send)
             #<=5 = smiley
             elif score <= 5:
+                final_message = random.choice(["owowo not bad lad! ","okAYY OKAY we going for sth here "])
                 with open('assets/guessing_game/smiley.png','rb') as image:
                     to_send = discord.File(image)
                     await ctx.send(file=to_send)
             #<=8 = neutral face
             elif score <= 8:
+                final_message = random.choice(["bro u actl kinda slow haha ","meh. u could do better fr "])
                 with open('assets/guessing_game/neutral.png','rb') as image:
                     to_send = discord.File(image)
                     await ctx.send(file=to_send)
             else:
+                final_message = random.choice(["are u even trying HAHHAHA ","eh. lame :3 "])
                 with open('assets/guessing_game/frowny.png','rb') as image:
                     to_send = discord.File(image)
                     await ctx.send(file=to_send)
             #else = frowny
 
             #then send the result message
-            await ctx.send(f'you got it in {score} guesses!')
+            await ctx.send(f'you got it in {score} guesses! {final_message}')
             print(f'guessing game ended as {guess} = {answer}, score = {score}')
             self.ongoing_guessing_games[ctx.author.name] = False
 
