@@ -5,6 +5,7 @@ from discord.ext import commands
 import main
 import csv
 import random
+from scripts import helpers
 
 class TextCommands(commands.Cog):
     def __init__(self, client):
@@ -199,7 +200,15 @@ class TextCommands(commands.Cog):
             await ctx.send(f'wrong answer! the answer was {answer}')
             print(f'user failed a riddle: {guess} != {answer}')
 
+    #command to see how many drew sharps have been shot so far
+    @commands.command(brief='fetches the number of drew sharps who have fallen. You either get the reference, or you don\'t.')
+    async def drew_sharp(self,ctx):
+        
+        #get the number
+        n_drewsharps = helpers.get_drewsharps()
 
+        #send it
+        await ctx.send(f'number of drew sharps felled by todd: {n_drewsharps}.\n\nEither you get the reference, or you don\'t.')
 
 #this must be present at the end of every cog file to make it work
 async def setup(client):

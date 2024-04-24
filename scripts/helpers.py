@@ -192,3 +192,35 @@ def add_to_hof(username: str):
     
     #return from the function once done
     return
+
+#this function will return the number of drew sharps shot
+def get_drewsharps():
+    
+    #open the file, get the list of elements
+    with open(main.DREWSHARP_PATH,'r',newline='') as file:
+        elements = list(csv.reader(file))
+    
+    #check if there are no entries in the list. If so, there have been no deaths, so return 0
+    if elements == []:
+        return 0
+    
+    else:
+        #if there is a number in the list, we get it as an integer and return it.
+        value = int(elements[0][0])
+        return value
+
+#this function will be for incrementing the drew sharp list. It's not really a list, just a file with a single integer in it.
+def shoot_drew_sharp():
+    
+    #get our number as it stands
+    current_val = get_drewsharps()
+    #increment it to get our new value
+    new_val = current_val + 1
+
+    #write it to our file.
+    with open(main.DREWSHARP_PATH,'w',newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([new_val])
+    
+    #and we're done!
+    return

@@ -20,6 +20,7 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 - github - embeds the github repo for todd!
 - hall_of_fame - displays the current standings in the hall of fame
 - pet - pet todd! he will return a randomized choice out of a few preset messages.
+- drew_sharp - gets the number of drew sharps that have fallen to todd (i.e. the number of spiders encountered in the fetch game)
 
 ### audio commands
 - join - joins the voice channel of the user who sent the message

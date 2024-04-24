@@ -19,6 +19,7 @@ SHAME_PATH = 'lists/file_of_shame.txt'
 FAME_PATH = 'lists/hall_of_fame.csv'
 INVENTORY_PATH = 'lists/inventory.csv'
 TODDALLIONS_PATH = 'lists/toddallions.csv'
+DREWSHARP_PATH = 'lists/drewsharp.csv'
 
 #files that already exist in the repo
 RIDDLES_PATH = 'lists/riddles.csv'
@@ -52,6 +53,10 @@ def run():
         with open(TODDALLIONS_PATH,'w') as file:
             file.close()
         print(f'created {TODDALLIONS_PATH}')
+    if not os.path.exists(DREWSHARP_PATH):
+        with open(DREWSHARP_PATH,'w') as file:
+            file.close()
+        print(f'created {DREWSHARP_PATH}')
     print('required files created!')
 
 
