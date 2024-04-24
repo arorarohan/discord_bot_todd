@@ -272,9 +272,31 @@ class Games(commands.Cog):
             print('theft failed: victim has 0 toddallions')
             return
         
+        #can't steal from yourself
         if victim_username == thief_username:
             await ctx.send('you can\'t steal from yourself! Please consider a more productive choice and try again.')
             print('theft failed: cannot steal from self.')
+            return
+        
+        #can't steal from someone who is not in this server (it wouldn't be fair)
+        #get a list of the mutual servers of todd and the victim. We will compare it to the name of this server
+        mutuals = arg.mutual_guilds
+        this_server = ctx.message.guild #the server the steal command was called in
+        
+        #we will search through every server in the mutuals list and compare its name to the name of the server the command was triggered from.
+        in_server = False
+        #don't bother searching if there are no mutual servers (this would happen if todo has been removed from the server the target user used to be in)
+        if mutuals != []:
+            #conduct the search and set in_server to True if we found this server in the list
+            for server in mutuals:
+                if server.name == this_server.name:
+                    in_server = True
+                    break
+
+        #deal with the issue if the user really isn't in this server, and return from the method to stop the steal from continuing.
+        if not in_server:
+            await ctx.send('you can\'t steal from that user as they aren\'t in this server! either invite them (todd wants everyone to be together) or steal from someone else!')
+            print('theft failed: victim not in server')
             return
 
         #if we can steal, we need to let the user know what they're in for.
