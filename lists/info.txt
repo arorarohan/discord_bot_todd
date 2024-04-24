@@ -1,1 +1,3 @@
 This is a place to store different lists. the files will be created on the first run of main.py if they do not already exist.
+
+Riddles credit: Colin Burke - https://github.com/crawsome/riddles/ (public domain)
