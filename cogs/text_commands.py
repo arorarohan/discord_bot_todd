@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 import main
 import csv
+import random
 
 class TextCommands(commands.Cog):
     def __init__(self, client):
@@ -131,6 +132,28 @@ class TextCommands(commands.Cog):
             await ctx.send(message_str)
             print("delivered the hall of fame!")
 
+    #command to pet todd!
+    @commands.command(brief='pet todd!')
+    async def pet(self, ctx):
+        #define our set of messages
+        messages = [
+            'todd rolls over onto his back and whimpers gently as you scratch his belly for minutes until suddenly, todd smells bacon. He jumps up and runs past you to investigate.',
+            'you give todd a quick pet on the head and he licks your face before running off.',
+            'you sit down on the couch, put on a movie and beckon to todd. He comes trotting over, and jumps up onto your lap. He falls asleep in your arms, and it isn\'t long before you doze off as well.',
+            'you start to pet todd but he bats your hand away with his paw. It\'s his naptime. Come back later!',
+            'you give todd a back massage! He smiles with glee!',
+            'you come home, and todd runs to you excitedly. You spend a few seconds petting him before heading to the shower. You see todd\'s fur peeking out from under the bathroom door. he is waiting.',
+            'it\'s time for todd to go to bed, but your day isn\'t over yet. You spend a few minutes sitting with todd, stroking him as you whisper a lullaby into his ear. Once he falls asleep, you regretfully get up, wondering how good life would be if you were a dog.',
+            'todd comes to you and stares at you vacantly. You ask him what he wants. He doesn\'t respond. "Food?" He cocks his head. Then moves toward you, and starts scratching his back on your leg. "Oh." You kneel down and start giving todd a good rub.',
+        ]
+
+        #choose the message to send
+        to_send = random.choice(messages)
+
+        #send the message!
+        await ctx.send(to_send)
+        print('petted todd!')
+        return
 
 #this must be present at the end of every cog file to make it work
 async def setup(client):
