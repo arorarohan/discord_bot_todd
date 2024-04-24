@@ -13,12 +13,15 @@ DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 WELCOME_CHANNEL = os.getenv('WELCOME_CHANNEL')
 TARGETED_USER = os.getenv('TARGETED_USER')
 
-#define some constants
+#files that will be created on first startup
 MOSTENIRE_PATH = 'lists/mostenire_list.csv'
 SHAME_PATH = 'lists/file_of_shame.txt'
 FAME_PATH = 'lists/hall_of_fame.csv'
 INVENTORY_PATH = 'lists/inventory.csv'
 TODDALLIONS_PATH = 'lists/toddallions.csv'
+
+#files that already exist in the repo
+RIDDLES_PATH = 'lists/riddles.csv'
 
 AUDIO_DIRECTORY = {
     'whisper':'audio/todd_whispers.mp3',

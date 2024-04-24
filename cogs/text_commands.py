@@ -163,6 +163,44 @@ class TextCommands(commands.Cog):
         print('petted todd!')
         return
 
+    #command to get a riddle!
+    @commands.command(brief='fetches a riddle, you guess the answer!')
+    async def riddle(self,ctx):
+        
+        #first, let's get a riddle from the database!
+        #start by getting a list of riddles from the file
+        with open(main.RIDDLES_PATH,'r') as file:
+            all_riddles = list(csv.reader(file))
+        
+        #now choose a riddle from the list at random!
+        chosen_riddle = random.choice(all_riddles)
+        
+        #split it into the prompt, and answer
+        prompt = chosen_riddle[0]
+        answer = chosen_riddle[1]
+
+        #send the riddle
+        await ctx.send(f'Todd came up with a riddle! his riddle is:\n\n{prompt}\n\nGuess the answer - you have 1 try!')
+
+        #screening function to filter messages that aren't from the user
+        def check(m):
+            return m.author.name == ctx.author.name
+        
+        #get the content of the user's guess
+        guess_msg = await self.client.wait_for('message', check=check)
+        guess = guess_msg.content
+
+        #if they were right, tell them!
+        if guess == answer:
+            await ctx.send('you got the answer! Todd jumps up and down excitedly.')
+            print(f'user guessed a riddle correctly: {guess} = {answer}')
+        #if they were wrong, reveal the answer
+        else:
+            await ctx.send(f'wrong answer! the answer was {answer}')
+            print(f'user failed a riddle: {guess} != {answer}')
+
+
+
 #this must be present at the end of every cog file to make it work
 async def setup(client):
     await client.add_cog(TextCommands(client))
