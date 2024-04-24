@@ -34,7 +34,7 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
  - fart - todd will fart, after 3 farts he will start having a growing chance to poop. If he poops, the chance will reset. Earn toddallions according to how many farts todd held it for.
  - fetch - todd will fetch an object and bring it to you. If he finds gold, you get into the hall of fame! Earn toddallions according to the rarity of the item found.
  - guessing_game - basically higher/lower. Keep guessing till you get the number todd is thinking of! Earn toddallions according to how many guesses it took.
- - steal - steal from another user! you need to invest 10 toddallions in this action, and can steal anywhere from 0 to 20.
+ - steal - steal from another user! you need to invest 20 toddallions in this action, and can steal anywhere from 0 to 40.
 
  ### shopping
  - shop - displays items in the shop
