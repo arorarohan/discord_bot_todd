@@ -278,7 +278,7 @@ class Games(commands.Cog):
             return
 
         #if we can steal, we need to let the user know what they're in for.
-        await ctx.send(f'Funding this theft requires you to spend 20 toddallions. You will steal an amount of toddallions between 0 and {theft_limit} from {victim_username}. Their balance is {victim_bal} and yours is {thief_bal}.\nContinue? (y/n)')
+        await ctx.send(f'Funding this theft requires you to spend 20 toddallions. You will steal an amount of toddallions between 0 and {theft_limit} from {victim_username}.\n{victim_username}\'s balance: {victim_bal}\nYour balance: {thief_bal}.\nContinue? (y/n)')
         
         #checking function to vet confirmation messages, so that only the thief can confirm.
         def check(m):
