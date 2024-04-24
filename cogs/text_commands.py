@@ -44,10 +44,18 @@ class TextCommands(commands.Cog):
     #mostenire add command to add mostenires to the list
     @commands.command(brief='adds your contribution to the mostenire list. Use <todd mostenire_add [word]>')
     async def mostenire_add(self, ctx, arg=''):
-        #don't accept an empty argument
+        
+        #don't accept an empty argument.
         if not len(arg) > 0:
             await ctx.send("Please try again with an item to add, ex. <todd mostenire_add mositor>")
             print('failed to add to mostenire list as there was nothing to add!')
+        
+        #don't accept a pingable object
+        elif arg.startswith('<@'):
+            await ctx.send('The mostenire list only accepts words! No funny business.')
+            print('prevented a ping from being added to the mostenire list.')
+        
+        #once we have an acceptable argument
         else:
             #open the csv
             with open(main.MOSTENIRE_PATH,'a',newline='') as file:

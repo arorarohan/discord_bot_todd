@@ -31,6 +31,9 @@ class ErrorHandling(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("you were supposed to give todd an argument, but you didn't , oh no, todd whimpers")
             print("ERROR: missing required argument")
+        #imvalid argument type?
+        if isinstance(error, commands.BadArgument):
+            await ctx.send('invalid argument type! If you entered a user, make sure they\'ve been pinged. todd cries.')
 
 
 #this must be present at the end of every cog file to make it work

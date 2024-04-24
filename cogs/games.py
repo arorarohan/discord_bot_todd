@@ -240,6 +240,93 @@ class Games(commands.Cog):
             self.ongoing_guessing_games[ctx.author.name] = False
 
 
+    ################################################################ STEAL ###########################################################################
+    ###################################################### IS THIS EVEN A GAME #############################################################################
+
+    #you must pay 20 toddallions to participate in theft. todd will steal a number of toddallions from a targeted user between 0 to 40 or the amount they have, whichever is lower.
+    @commands.command(brief='steal from another user! Use <todd steal @user>')
+    async def steal(self, ctx, arg: discord.User):
+        #by default this will ignore any argument that isn't of the valid type
+
+        #now let's get our user data.
+        thief_username = ctx.author.name
+        thief_bal = helpers.check_balance(thief_username)
+        victim_username = arg.name
+        victim_bal = helpers.check_balance(victim_username)
+
+        #let's figure out the maximum number of toddallions that can be stolen
+        if victim_bal < 40:
+            theft_limit = victim_bal
+        else:
+            theft_limit = 40
+        
+        #the thief can't steal if they can't put up the 20 toddallions.
+        if thief_bal < 20:
+            await ctx.send('you need to have at least 20 toddallions to fund this theft! Come again when you aren\'t as poor.')
+            print('theft failed: not enough toddallions')
+            return
+
+        #can't steal if the victim has no toddallions.
+        if victim_bal == 0:
+            await ctx.send('you can\'t steal from that user, because their balance is zero! try again, but choose someone worth stealing from.')
+            print('theft failed: victim has 0 toddallions')
+            return
+        
+        if victim_username == thief_username:
+            await ctx.send('you can\'t steal from yourself! Please consider a more productive choice and try again.')
+            print('theft failed: cannot steal from self.')
+            return
+
+        #if we can steal, we need to let the user know what they're in for.
+        await ctx.send(f'Funding this theft requires you to spend 20 toddallions. You will steal an amount of toddallions between 0 and {theft_limit} from {victim_username}. Their balance is {victim_bal} and yours is {thief_bal}.\nContinue? (y/n)')
+        
+        #checking function to vet confirmation messages, so that only the thief can confirm.
+        def check(m):
+            return ctx.author.name == m.author.name
+
+        #get the decision from the user
+        decision_msg = await self.client.wait_for('message', check=check)
+        #extract the content of the message object
+        decision = decision_msg.content
+
+        #filter for valid decisions
+        if decision not in ['y','n']:
+            #use a while loop to keep checking until we get a valid decision
+            while decision not in ['y','n']:
+                await ctx.send('invalid decision, enter y to proceed with the theft and n to cancel it.')
+                print('invalid decision received, getting new decision')
+
+                #get a new decision, and get the content of that message object
+                decision_msg = await self.client.wait_for('message', check=check)
+                decision = decision_msg.content
+
+        #cancel if the user said no.
+        if decision == 'n':
+            await ctx.send('theft cancelled.')
+            print('theft cancelled by user')
+            return
+        
+        #if we got to this point, they said yes. So let's process the theft.
+        
+        #find out how much is stolen and get the profit (negative=loss)
+        theft_amt = random.randint(0,theft_limit)
+        profit = theft_amt - 20
+
+        #make the account adjustments - the thief gains/loses the difference between the theft cost and the stolen amount, while the victim loses however much was stolen
+        helpers.update_balance(thief_username, profit)
+        new_thief_bal = helpers.check_balance(thief_username)
+
+        helpers.update_balance(victim_username,-theft_amt) #a very important negative sign!
+        new_victim_bal = helpers.check_balance(victim_username)
+
+        #let's display the result!
+        await ctx.send(f'You spent 20 toddallions to steal {theft_amt} from {victim_username}! Your profit (or loss) was {profit}.\nYour new balance: {new_thief_bal}.\n{victim_username}\'s new balance: {new_victim_bal}.')
+        print(f'{thief_username} stole {theft_amt} from {victim_username}: profit = {profit}, thief balance changed from {thief_bal} to {new_thief_bal}, victim balance changed from {victim_bal} to {new_victim_bal}.')
+
+
+
+
+
 #this must be present at the end of every cog file to make it work. don't ask me why. it's just how it is. like how the sky is blue (when there isn't a storm, and it's daytime) and how the sky is not blue otherwise.
 async def setup(client):
     await client.add_cog(Games(client))

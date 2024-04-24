@@ -19,6 +19,7 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 - file_of_shame - prints the file of shame, a list of messages sent by TARGETED_USER
 - github - embeds the github repo for todd!
 - hall_of_fame - displays the current standings in the hall of fame
+- pet - pet todd! he will return a randomized choice out of a few preset messages.
 
 ### audio commands
 - join - joins the voice channel of the user who sent the message
@@ -30,9 +31,10 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 - playlist - display the playlist of items to play
 
 ### games
- - fart - todd will fart, after 3 farts he will start having a growing chance to poop. If he poops, the chance will reset.
- - fetch - todd will fetch an object and bring it to you. If he finds gold, you get into the hall of fame! You will earn toddallions from this!
- - guessing_gamae - basically higher/lower. Keep guessing till you get the number todd is thinking of!
+ - fart - todd will fart, after 3 farts he will start having a growing chance to poop. If he poops, the chance will reset. Earn toddallions according to how many farts todd held it for.
+ - fetch - todd will fetch an object and bring it to you. If he finds gold, you get into the hall of fame! Earn toddallions according to the rarity of the item found.
+ - guessing_game - basically higher/lower. Keep guessing till you get the number todd is thinking of! Earn toddallions according to how many guesses it took.
+ - steal - steal from another user! you need to invest 10 toddallions in this action, and can steal anywhere from 0 to 20.
 
  ### shopping
  - shop - displays items in the shop
