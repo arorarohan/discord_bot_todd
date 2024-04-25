@@ -129,6 +129,55 @@ def add_to_inventory(username: str, to_add: str):
         for entry in entries:
             writer.writerow(entry)
 
+
+#this function is for removing a selected item from a user's inventory
+def remove_from_inventory(username: str, item: str):
+
+    #let's get our list of items, and get a list of usernames out of that. Entries is a list of lists.
+    with open(main.INVENTORY_PATH,'r') as file:
+        entries = list(csv.reader(file))
+
+    usernames = [entry[0] for entry in entries]
+
+    #make sure the username we're removing from is even in the list in the first place (if they're not, they don't have anything to remove)
+    if username not in usernames:
+        print('removal failed: username has no items')
+        return
+
+    #find the list of items belonging to the user
+    for i in range(len(usernames)):
+        if usernames[i] == username:
+            
+            #if they don't have anything, we return
+            if len(entries[i]) < 2:
+                print('removal failed: username has no items')
+                return
+            
+            #otherwise, go through their list of items and find the one we are looking for.
+            removed = False
+            for j in range(1,len(entries[i])): #we are starting from 1 to exclude the username itself.
+                if entries[i][j] == item:
+                    #if we found it, remove it and note that we removed something
+                    entries[i].pop(j)
+                    removed = True
+                    break #so that we only remove the first instance.
+            
+            break #so we stop searching usernames after we found the one we were looking for.
+    
+    #if we removed something, we rewrite the list
+    if removed:
+        with open(main.INVENTORY_PATH,'w',newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(entries)
+        print('removed item from inventory successfully!')
+        return
+    
+    else:
+        #if we didn't remove something, it means we didn't find the item.
+        print('removal failed: did not find specified item')
+        return
+
+
 #function to sort the currency list, we will call this for sorting the list in the net worth leaderboard!
 def sort_toddalions(to_sort: list):
     #initialize the lists we will be modifying

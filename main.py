@@ -80,6 +80,7 @@ def run():
         await client.load_extension('cogs.audio_commands')
         await client.load_extension('cogs.games')
         await client.load_extension('cogs.shopping')
+        await client.load_extension('cogs.trading')
         print('cogs loaded!')
 
         #set todd's status
