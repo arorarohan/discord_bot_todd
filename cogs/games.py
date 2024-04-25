@@ -315,9 +315,9 @@ class Games(commands.Cog):
         decision = decision_msg.content
 
         #filter for valid decisions
-        if decision not in ['y','n']:
+        if decision not in ['y','Y','n','N']:
             #use a while loop to keep checking until we get a valid decision
-            while decision not in ['y','n']:
+            while decision not in ['y','Y','n','N']:
                 await ctx.send('invalid decision, enter y to proceed with the theft and n to cancel it.')
                 print('invalid decision received, getting new decision')
 
@@ -326,7 +326,7 @@ class Games(commands.Cog):
                 decision = decision_msg.content
 
         #cancel if the user said no.
-        if decision == 'n':
+        if decision in ['n','N']:
             await ctx.send('theft cancelled.')
             print('theft cancelled by user')
             return
