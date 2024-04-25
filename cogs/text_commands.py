@@ -178,7 +178,7 @@ class TextCommands(commands.Cog):
         
         #split it into the prompt, and answer
         prompt = chosen_riddle[0]
-        answer = chosen_riddle[1]
+        answer = chosen_riddle[1].lower() #control the answer and guess by making both lowercase, to prevent case mismatch
 
         #send the riddle
         await ctx.send(f'Todd came up with a riddle! his riddle is:\n\n{prompt}\n\nGuess the answer - you have 1 try!')
@@ -189,7 +189,7 @@ class TextCommands(commands.Cog):
         
         #get the content of the user's guess
         guess_msg = await self.client.wait_for('message', check=check)
-        guess = guess_msg.content
+        guess = guess_msg.content.lower() #prevent a case mismatch between the guess and answer
 
         #if they were right, tell them!
         if guess == answer:

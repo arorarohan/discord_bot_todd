@@ -31,7 +31,7 @@ class ErrorHandling(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("you were supposed to give todd an argument, but you didn't , oh no, todd whimpers")
             print("ERROR: missing required argument")
-        #imvalid argument type?
+        #invalid argument type
         if isinstance(error, commands.BadArgument):
             await ctx.send('invalid argument type! If you entered a user, make sure they\'ve been pinged. todd cries.')
 
