@@ -119,21 +119,29 @@ class Trading(commands.Cog):
         #now we have the essential information of the trade request, let's confirm before storing it
 
         await ctx.send(f'You want to trade your {request.sender_item} with {request.recipient_username}\'s {request.recipient_item}, are you sure? (y/n)')
-        
         confirmation_message = await self.client.wait_for('message', check=check)
-        confirmation_message = confirmation_message.content
-
-        #check that the confirmation message is a valid choice, and keep prompting until we get one.
-        if confirmation_message not in ['y','Y','n','N']:
-            while confirmation_message not in ['y','Y','n','N']:
-                #give feedback
-                await ctx.send('invalid response, please choose either y or n')
-                #get a new response
-                confirmation_message = await self.client.wait_for('message', check=check)
-                confirmation_message = confirmation_message.content
         
-        #now abort if the confirmation message is n
-        if confirmation_message in ['n','N']:
+        #check the decision
+        try:
+            decision = helpers.get_confirmation(confirmation_message.content)
+        
+        #if there was an exception it means the confirmation message wasn't valid (y/n).
+        except Exception:
+            #so we need to keep prompting until we don't get an exception
+            while True:
+                await ctx.send('invalid decision, enter y to proceed with the trade and n to cancel it.')
+                print('invalid decision received, getting new decision')
+                confirmation_message = await self.client.wait_for('message', check=check)
+
+                #check this decision again and break if we don't get an exception. Until that happens we'll just keep looping.
+                try:
+                    decision = helpers.get_confirmation(confirmation_message.content)
+                    break
+                except Exception:
+                    continue
+        
+        #now abort if the confirmation is negative
+        if decision == False:
             await ctx.send('aborted transaction')
             print('trade failed: aborted by user')
             return
@@ -241,23 +249,32 @@ class Trading(commands.Cog):
         selected_request = incoming_requests[selection-1]
         await ctx.send(f'are you sure you want to accept this trade? you will receive {selected_request.sender_item}, and will give {selected_request.sender_username} your {selected_request.recipient_item}. (y/n)')
         
-        #collect and process their message
-        confirmation_message = await self.client.wait_for('message', check=check)
-        confirmation_message = confirmation_message.content
-
-        #check that the confirmation message is a valid choice, and keep prompting until we get one.
-        if confirmation_message not in ['y','Y','n','N']:
-            while confirmation_message not in ['y','Y','n','N']:
-                #give feedback
-                await ctx.send('invalid response, please choose either y or n')
-                #get a new response
-                confirmation_message = await self.client.wait_for('message', check=check)
-                confirmation_message = confirmation_message.content
+        #get the decision from the user
+        decision_msg = await self.client.wait_for('message', check=check)
         
-        #now abort if the confirmation message is n
-        if confirmation_message in ['n','N']:
-            await ctx.send('aborted transaction')
-            print('trade acceptance failed: aborted by user')
+        #check the decision
+        try:
+            decision = helpers.get_confirmation(decision_msg.content)
+        
+        #if there was an exception it means the confirmation message wasn't valid (y/n).
+        except Exception:
+            #so we need to keep prompting until we don't get an exception
+            while True:
+                await ctx.send('invalid decision, enter y to accept the trade and n to cancel.')
+                print('invalid decision received, getting new decision')
+                decision_msg = await self.client.wait_for('message', check=check)
+
+                #check this decision again and break if we don't get an exception. Until that happens we'll just keep looping.
+                try:
+                    decision = helpers.get_confirmation(decision_msg.content)
+                    break
+                except Exception:
+                    continue
+
+        #cancel if the user said no.
+        if decision == False:
+            await ctx.send('trade cancelled.')
+            print('trade cancelled by user')
             return
         
         #if we made it here, they said yes! but before we can process the trade, check that the users still have the items they are trading!
@@ -339,23 +356,32 @@ class Trading(commands.Cog):
         selected_request = incoming_requests[selection-1] #offset by 1 because our list indices start from 0 but they are presented to the user starting from 1
         await ctx.send(f'are you sure you want to decline this trade? {selected_request.get_preview()}. (y/n)')
         
-        #collect and process their message
-        confirmation_message = await self.client.wait_for('message', check=check)
-        confirmation_message = confirmation_message.content
-
-        #check that the confirmation message is a valid choice, and keep prompting until we get one.
-        if confirmation_message not in ['y','Y','n','N']:
-            while confirmation_message not in ['y','Y','n','N']:
-                #give feedback
-                await ctx.send('invalid response, please choose either y or n')
-                #get a new response
-                confirmation_message = await self.client.wait_for('message', check=check)
-                confirmation_message = confirmation_message.content
+        #get the decision from the user
+        decision_msg = await self.client.wait_for('message', check=check)
         
-        #now abort if the confirmation message is n
-        if confirmation_message in ['n','N']:
-            await ctx.send('aborted transaction')
-            print('trade decline failed: aborted by user')
+        #check the decision
+        try:
+            decision = helpers.get_confirmation(decision_msg.content)
+        
+        #if there was an exception it means the confirmation message wasn't valid (y/n).
+        except Exception:
+            #so we need to keep prompting until we don't get an exception
+            while True:
+                await ctx.send('invalid decision, enter y to proceed with the trade and n to cancel it.')
+                print('invalid decision received, getting new decision')
+                decision_msg = await self.client.wait_for('message', check=check)
+
+                #check this decision again and break if we don't get an exception. Until that happens we'll just keep looping.
+                try:
+                    decision = helpers.get_confirmation(decision_msg.content)
+                    break
+                except Exception:
+                    continue
+
+        #cancel if the user said no.
+        if decision == False:
+            await ctx.send('trade cancelled.')
+            print('trade cancelled by user')
             return
         
         #if we made it here, they confirmed their cancellation! So let's find it in the requests list and remove it.

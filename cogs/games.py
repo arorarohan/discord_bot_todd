@@ -302,22 +302,28 @@ class Games(commands.Cog):
 
         #get the decision from the user
         decision_msg = await self.client.wait_for('message', check=check)
-        #extract the content of the message object
-        decision = decision_msg.content
-
-        #filter for valid decisions
-        if decision not in ['y','Y','n','N']:
-            #use a while loop to keep checking until we get a valid decision
-            while decision not in ['y','Y','n','N']:
+        
+        #check the decision
+        try:
+            decision = helpers.get_confirmation(decision_msg.content)
+        
+        #if there was an exception it means the confirmation message wasn't valid (y/n).
+        except Exception:
+            #so we need to keep prompting until we don't get an exception
+            while True:
                 await ctx.send('invalid decision, enter y to proceed with the theft and n to cancel it.')
                 print('invalid decision received, getting new decision')
-
-                #get a new decision, and get the content of that message object
                 decision_msg = await self.client.wait_for('message', check=check)
-                decision = decision_msg.content
+
+                #check this decision again and break if we don't get an exception. Until that happens we'll just keep looping.
+                try:
+                    decision = helpers.get_confirmation(decision_msg.content)
+                    break
+                except Exception:
+                    continue
 
         #cancel if the user said no.
-        if decision in ['n','N']:
+        if decision == False:
             await ctx.send('theft cancelled.')
             print('theft cancelled by user')
             return

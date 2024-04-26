@@ -273,3 +273,13 @@ def shoot_drew_sharp():
     
     #and we're done!
     return
+
+#a helper function for checking the input when a user is asked for y/n confirmation.
+def get_confirmation(input: str):
+    if input.lower() not in ['y','n']:
+        raise Exception('input not in possible inputs')
+
+    elif input.lower() == 'y':
+        return True
+    elif input.lower() == 'n':
+        return False
