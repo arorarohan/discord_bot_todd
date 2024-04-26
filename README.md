@@ -1,5 +1,7 @@
 # Todd the dog: a discord bot
-Just a bot I made to mess around with, with my friends. Not really intended to be plug-and-play for others, but you're welcome to try.
+Just a bot I made to mess around with, with my friends. You can clone the repo and set it up fairly easily, allowing you to host it from the command line on any computer that can install the required software, and then start adding it to servers. For example, I am hosting my version of it on a raspberry pi running linux.
+
+Feel free to suggest changes and improvements.
 
 ## general requirements
 - python3
@@ -32,16 +34,22 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 - playlist - display the playlist of items to play
 
 ### games
- - fart - todd will fart, after 3 farts he will start having a growing chance to poop. If he poops, the chance will reset. Earn toddallions according to how many farts todd held it for.
- - fetch - todd will fetch an object and bring it to you. If he finds gold, you get into the hall of fame! Earn toddallions according to the rarity of the item found.
- - guessing_game - basically higher/lower. Keep guessing till you get the number todd is thinking of! Earn toddallions according to how many guesses it took.
- - steal - steal from another user! you need to invest 20 toddallions in this action, and can steal anywhere from 0 to 40.
+- fart - todd will fart, after 3 farts he will start having a growing chance to poop. If he poops, the chance will reset. Earn toddallions according to how many farts todd held it for.
+- fetch - todd will fetch an object and bring it to you. If he finds gold, you get into the hall of fame! Earn toddallions according to the rarity of the item found.
+- guessing_game - basically higher/lower. Keep guessing till you get the number todd is thinking of! Earn toddallions according to how many guesses it took.
+- steal - steal from another user! you need to invest 20 toddallions in this action, and can steal anywhere from 0 to 40.
 
- ### shopping
- - shop - displays items in the shop
- - balance - displays your balance in toddallions
- - buy - buy an item from the shop (if you can afford it)
- - inventory - display your inventory of items purchased from the shop!
+### shopping
+- shop - displays items in the shop
+- balance - displays your balance in toddallions
+- buy - buy an item from the shop (if you can afford it)
+- inventory - display your inventory of items purchased from the shop!
+
+### trading
+- trade - takes a user (either @user or username) as an argument. guides you through creating a trade request with that user.
+- trade_requests - allows you to see your outstanding incoming and outgoing trade requests.
+- trade_accept - displays your incoming trade requests, allowing you to accept them. Inventory changes will take place immediately upon acceptance.
+- trade_decline - displays your incoming trade requests, allowing you to delete them.
 
 ## usage - events
 - on_member_join - will greet new members in WELCOME_CHANNEL
@@ -53,3 +61,8 @@ Just a bot I made to mess around with, with my friends. Not really intended to b
 - decorators
 - async programming
 - OOP
+- storing data
+
+## credits
+- some art by https://www.youtube.com/mostenire
+- some art and features by https://github.com/huitingloke
