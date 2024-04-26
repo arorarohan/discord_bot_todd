@@ -11,10 +11,16 @@ class Shopping(commands.Cog):
         self.shop_items = {
             'collar':50,
             'pickle':20,
+            'leash':35,
+            'bag_of_treats':70,
+            'todd_dna_test':90,
             'squeaky_toy':100,
             'golden_statue':500,
             'dog_training_book':150,
-            'stuffed_panda':200
+            'stuffed_panda':200,
+            'staff_of_todd':250,
+            'immortality':4200,
+
         }
 
     #view the shop
