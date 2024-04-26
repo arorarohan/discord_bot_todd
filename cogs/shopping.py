@@ -1,27 +1,19 @@
-# for all shopping-related commands!
+# for all shopping and item-related commands!
 import discord
 from discord.ext import commands
 import main
 from scripts import helpers
 import csv
+from scripts.dictionaries import Dictionaries
 
 class Shopping(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.shop_items = {
-            'collar':50,
-            'pickle':20,
-            'leash':35,
-            'bag_of_treats':70,
-            'todd_dna_test':90,
-            'squeaky_toy':100,
-            'golden_statue':500,
-            'dog_training_book':150,
-            'stuffed_panda':200,
-            'staff_of_todd':250,
-            'immortality':4200,
 
-        }
+        #bring in our shop items from the dictionaries file
+        dictionaries = Dictionaries()
+        dictionaries.load_shop_items()
+        self.shop_items = dictionaries.shop_items
 
     #view the shop
     @commands.command(brief='spend money get pretty. see how you can spend your toddallions')
@@ -30,7 +22,7 @@ class Shopping(commands.Cog):
         #get all the shop items as lines in a list
         lines = []
         for key, value in self.shop_items.items():
-            lines.append(f"{key} --- {value}")
+            lines.append(f"{key} --- {value['value']}")
         
         #print our message, including all the lines in the list separated by newlines.
         message = "Below are the items currently available in the shop! Prices listed in Toddallions. Use <todd buy [item_name]> to buy! (all purchases are non-refundable, non-exchangable and have no warranty) \n\n" + "\n".join(lines) + "\n\nNot enough toddallions? Play games to earn more! Use <todd help> to see avaiable games."
@@ -60,7 +52,7 @@ class Shopping(commands.Cog):
         
         #with a valid argument, we proceed to get the price and make the required changes.
         else:
-            price = self.shop_items[arg]
+            price = self.shop_items[arg]['value']
             available_balance = helpers.check_balance(ctx.author.name)
             
             #determine whether the user can afford it
@@ -84,7 +76,7 @@ class Shopping(commands.Cog):
         items_list = helpers.get_inventory_list(ctx.author.name)
 
         #add these items to a message and send it
-        message = "your inventory contains: \n\n" + "\n".join(items_list) + "\n\nWant more items? Buy them in the shop with <todd shop>!"
+        message = "your inventory contains: \n\n" + "\n".join(items_list) + "\n\nUse your items with <todd use [item]>. Want more items? Buy them in the shop with <todd shop>!"
         await ctx.send(message)
         print(f'displayed inventory of {ctx.author.name}!')
     
@@ -107,7 +99,7 @@ class Shopping(commands.Cog):
             #only bother to sum assets value if there are any assets to sum.
             if not owned_items == []:
                 for item in owned_items:
-                    item_value = self.shop_items[item]
+                    item_value = self.shop_items[item]['value']
                     assets_value += item_value
         
             #calculate net worth
@@ -127,6 +119,51 @@ class Shopping(commands.Cog):
         message = "Net worth leaderboard (inclusive of toddallions and purchased items): \n\n" + "\n".join(lines) + "\n\nTo climb, grind toddallions by playing games! Use <todd help> to see available games."
         await ctx.send(message)
         print('delivered the leaderboard!')
+
+    
+    #command to use an item in your inventory
+    @commands.command(brief='use an item from your inventory! use <todd use [item]>')
+    async def use(self, ctx, item_to_use):
+        
+        #first we validate that this is in the user's inventory
+        inv_list = helpers.get_inventory_list(ctx.author.name)
+        #abort with a message if we didn't find that item
+        if item_to_use not in inv_list:
+            await ctx.send('Can\'t use that item, because it isn\'t in your inventory!')
+            print(f'use failed: could not find {item_to_use} in {inv_list}')
+            return
+        
+        #now validate that the item was something bought from the shop, otherwise we have no data on it.
+        if item_to_use not in self.shop_items.keys():
+            await ctx.send('Can\'t use that item, because it isn\'t an official shop item!')
+            print(f'use failed: could not find {item_to_use} in {self.shop_items.keys()}')
+            return
+        
+        #if we're here, the item can be used. So let's use it! This means we will send out the message and image associated with the item
+        #first we fetch and send the image, if there is an image
+        item_image = self.shop_items[item_to_use]['image']
+        if item_image is not None:
+            with open(item_image,'rb') as image:
+                    to_send = discord.File(image)
+                    await ctx.send(file=to_send)
+
+        #then we send a message.
+        
+        #immortality is the special case. it's too long so we broke it up into 3 messages.
+        if item_to_use == 'immortality':
+            await ctx.send(self.shop_items[item_to_use]['message1'])
+            await ctx.send(self.shop_items[item_to_use]['message2'])
+            await ctx.send(self.shop_items[item_to_use]['message3'])
+
+        #for the normal case, we only need to send 1 message.
+        else:
+            await ctx.send(self.shop_items[item_to_use]['message'])
+            
+        #finally, we print to the console and return
+        print(f'{ctx.author.name} used {item_to_use}!')
+        return  
+        
+
 
 
 #this must be present at the end of every cog file to make it work. don't ask me why. it's just how it is. like how the sky is blue (when there isn't a storm, and it's daytime) and how the sky is not blue otherwise.

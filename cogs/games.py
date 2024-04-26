@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 import random
 from scripts import helpers
-from scripts.fetchables import Fetchables
+from scripts.dictionaries import Dictionaries
 
 class Games(commands.Cog):
     def __init__(self, client):
@@ -69,10 +69,11 @@ class Games(commands.Cog):
     @commands.command(brief='todd fetches stuff! good boy')
     async def fetch(self, ctx):
         
-        #instantiate a fetchables object
-        get_fetchables = Fetchables()
+        #instantiate a dictionaries object, and load the fetchables
+        dictionaries = Dictionaries()
+        dictionaries.load_fetchables()
         #get our fetchables dictionary from it
-        fetchables = get_fetchables.fetchables
+        fetchables = dictionaries.fetchables
 
         #now let's determine which item has been fetched!
         #random.choices() does not take DictKeys or DictValues as inputs so we have to convert them to lists first.
