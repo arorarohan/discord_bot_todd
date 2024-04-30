@@ -66,5 +66,3 @@ Feel free to suggest changes and improvements.
 ## credits
 - some art by https://www.youtube.com/mostenire
 - some art and features by https://github.com/huitingloke
-
-test
